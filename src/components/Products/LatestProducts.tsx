@@ -8,17 +8,22 @@ const LatestProducts = () => {
     const [latestProducts, setLatestProducts] = React.useState([]);
 
     React.useEffect(() => {
-        products.getAllProducts().then((products: IProduct[]) => setLatestProducts(products.slice(products.length - 6, products.length - 1)))
+        products.getAllProducts().then((products: IProduct[]) => setLatestProducts(products.slice(Math.max(products.length - 5, 0))))
     }, [])
 
     return (
-        <div className='products-grid'>
-            {latestProducts.map((product) => {
-                return (
-                    <ProductCard key={product.id} image={product.image} name={product.name} price={product.price} />
-                )
-            })}
-        </div>
+        <>
+            <div>
+                <h1>Latest products added:</h1>
+            </div>
+            <div className='products-grid'>
+                {latestProducts.map((product) => {
+                    return (
+                        <ProductCard key={product.id} image={product.image} name={product.name} price={product.price} />
+                    )
+                })}
+            </div>
+        </>
     )
 }
 

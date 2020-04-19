@@ -1,3 +1,8 @@
+//@ts-ignore
+import ballaImageUrl from '../assets/images/balla.png';
+//@ts-ignore
+import KaauflandImageUrl from '../assets/images/kaaufland.png';
+
 export const SHOPS = [
     { id: 1, shopBrandId: 1, address: 'Bulgaria, Sofia, Bulgaria avenue 55', map: {} },
     { id: 2, shopBrandId: 1, address: 'Bulgaria, Sofia, Bulgaria avenue 69', map: {} },
@@ -15,6 +20,6 @@ export const PRODUCTS = [
     { id: 7, name: 'Kaafland Bread', price: 0.68, image: 'https://i0.wp.com/gatherforbread.com/wp-content/uploads/2015/08/Easiest-Yeast-Bread.jpg?fit=800%2C1157&ssl=1' },
 ]
 export const SHOPS_BRANDS = [
-    { id: 1, name: 'Balla', shopsIds: [1, 2], productsIds: [1, 2, 3, 4, 5] },
-    { id: 2, name: 'Kaaufland', shopsIds: [3, 4] }
+    { id: 1, name: 'Balla', shopsIds: [1, 2], productsIds: [1, 2, 3, 4, 5], image: ballaImageUrl },
+    { id: 2, name: 'Kaaufland', shopsIds: [3, 4], productsIds: [], image: KaauflandImageUrl }
 ]

@@ -1,23 +1,49 @@
 import * as React from 'react';
-import { IProduct } from '../../globals/interfaces';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
-import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import IconButton from '@material-ui/core/IconButton';
+import StarBorderIcon from '@material-ui/icons/StarBorder';
+import ShoppingCartOutlinedIcon from '@material-ui/icons/ShoppingCartOutlined';
 
 const useStyles = makeStyles({
     root: {
         width: 300,
+        position: 'relative',
         margin: '0 auto',
         marginBottom: 10
     },
     media: {
-        height: 150,
+        position: 'relative',
+        height: 230,
+        backgroundSize: 'cover'
     },
+    content: {
+        width: '90%',
+        bottom: 0,
+        position: 'absolute',
+        backgroundColor: 'rgb(250, 250, 250, 0.5)',
+        display: 'flex',
+
+    },
+    title: {
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap'
+    },
+    infoHolder: {
+        width: '80%'
+    },
+    cardActions: {
+        width: '20%',
+        display: 'flex',
+        flexFlow: 'row',
+        alignItems: 'center'
+    }
 });
 
 interface IProductCardProps {
@@ -36,25 +62,28 @@ const ProductCard = ({ name, image, price }: IProductCardProps) => {
                     className={classes.media}
                     image={image}
                     title={name}
+                    component="div"
                 />
-                <CardContent>
-                    <Typography gutterBottom variant="h5" component="h2">
+            </CardActionArea>
+            <CardContent className={classes.content}>
+                <div className={classes.infoHolder}>
+                    <Typography gutterBottom variant="body1" component='h5' title={name} className={classes.title}>
                         {name}
                     </Typography>
                     <Typography variant="body2" color="textSecondary" component="p">
                         {price} lv.
-                    </Typography>
-                </CardContent>
-            </CardActionArea>
-            <CardActions>
-                <Button size="small" color="primary">
-                    Add to chart
-                </Button>
-                <Button size="small" color="primary">
-                    Add to favorites
-                </Button>
-            </CardActions>
-        </Card>
+                </Typography>
+                </div>
+                <CardActions className={classes.cardActions}>
+                    <IconButton aria-label="delete" size="small">
+                        <StarBorderIcon fontSize="inherit" />
+                    </IconButton>
+                    <IconButton aria-label="add-to-cart" size="small">
+                        <ShoppingCartOutlinedIcon fontSize="inherit" />
+                    </IconButton>
+                </CardActions>
+            </CardContent>
+        </Card >
     )
 }
 
