@@ -9,13 +9,23 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import MenuDrawer from './MenuDrawer';
+//@ts-ignore
+import logo from '../../assets/favicon/favicon-32x32.png';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       flexGrow: 1,
+      position: 'fixed',
+      zIndex: 99,
+      width: '100%',
     },
-    appBar: { background: 'rgba(0,0,0,0.5)' },
+    appBar: {
+      background: 'rgba(0,0,0,0.7)',
+      height: 60,
+      borderBottom: '1px solid #595959'
+    },
     menuButton: {
       marginRight: theme.spacing(2),
     },
@@ -51,8 +61,12 @@ export default function MenuAppBar() {
           <IconButton edge="start" className={classes.menuButton} onClick={toggleDrawer} color="inherit" aria-label="menu">
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" className={classes.title}>
-            Shopping Assistant
+          <Link to="/">
+            <IconButton edge="start" className={classes.menuButton} aria-label="home">
+              <img src={logo} />
+            </IconButton>
+          </Link>
+          <Typography variant="h5" className={classes.title}>
           </Typography>
           {auth && (
             <div>
