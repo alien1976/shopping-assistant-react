@@ -1,7 +1,31 @@
+body, html {
+    margin: 0;
+    height: 100%;
+    background: #595959;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    color: white;
+}
+
+#root {
+    height: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background: #595959;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 1) 0%, rgba(89, 89, 89, 1) 100%);
+}
+
+.content-title {
+    margin: 0 auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+    text-align: center;
+}
+
 .products-grid {
     display: flex;
     align-items: flex-start;
-    justify-content: space-between;
+    justify-content: center;
     flex-direction: row;
     flex-wrap: wrap;
     padding-left: 10px;

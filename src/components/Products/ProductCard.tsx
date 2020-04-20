@@ -14,26 +14,34 @@ const useStyles = makeStyles({
     root: {
         width: 300,
         position: 'relative',
-        margin: '0 auto',
-        marginBottom: 10
+        marginBottom: 10,
+        borderRadius: 0,
+        background: 'none'
     },
     media: {
         position: 'relative',
-        height: 230,
+        height: 300,
         backgroundSize: 'cover'
     },
     content: {
         width: '90%',
         bottom: 0,
         position: 'absolute',
-        backgroundColor: 'rgb(250, 250, 250, 0.5)',
+        backgroundColor: 'rgb(0, 0, 0, 0.3)',
         display: 'flex',
-
+        background: 'none'
     },
     title: {
         overflow: 'hidden',
         textOverflow: 'ellipsis',
-        whiteSpace: 'nowrap'
+        whiteSpace: 'nowrap',
+        color: 'white'
+    },
+    title2: {
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+        color: '#dedede'
     },
     infoHolder: {
         width: '80%'
@@ -43,6 +51,9 @@ const useStyles = makeStyles({
         display: 'flex',
         flexFlow: 'row',
         alignItems: 'center'
+    },
+    iconButton: {
+        color: 'white'
     }
 });
 
@@ -70,16 +81,16 @@ const ProductCard = ({ name, image, price }: IProductCardProps) => {
                     <Typography gutterBottom variant="body1" component='h5' title={name} className={classes.title}>
                         {name}
                     </Typography>
-                    <Typography variant="body2" color="textSecondary" component="p">
+                    <Typography variant="body2" color="textSecondary" component="p" className={classes.title2}>
                         {price} lv.
                 </Typography>
                 </div>
                 <CardActions className={classes.cardActions}>
-                    <IconButton aria-label="delete" size="small">
-                        <StarBorderIcon fontSize="inherit" />
+                    <IconButton aria-label="delete" size="small" className={classes.iconButton}>
+                        <StarBorderIcon />
                     </IconButton>
-                    <IconButton aria-label="add-to-cart" size="small">
-                        <ShoppingCartOutlinedIcon fontSize="inherit" />
+                    <IconButton aria-label="add-to-cart" size="small" className={classes.iconButton}>
+                        <ShoppingCartOutlinedIcon />
                     </IconButton>
                 </CardActions>
             </CardContent>

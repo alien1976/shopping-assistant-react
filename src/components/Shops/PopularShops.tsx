@@ -13,8 +13,8 @@ const PopularShops = () => {
 
     return (
         <>
-            <div>
-                <h1>Latest shops added:</h1>
+            <div className="content-title">
+                <h2>Latest shops added</h2>
             </div>
             <div className='products-grid'>
                 {latestShops.map((shop) => {

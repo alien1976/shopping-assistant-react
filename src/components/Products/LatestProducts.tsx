@@ -13,8 +13,8 @@ const LatestProducts = () => {
 
     return (
         <>
-            <div>
-                <h1>Latest products added:</h1>
+            <div className="content-title">
+                <h2>Latest products added</h2>
             </div>
             <div className='products-grid'>
                 {latestProducts.map((product) => {

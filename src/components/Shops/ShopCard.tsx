@@ -12,33 +12,40 @@ const useStyles = makeStyles({
     root: {
         width: 300,
         position: 'relative',
-        margin: '0 auto',
-        marginBottom: 10
+        marginBottom: 10,
+        borderRadius: 0,
+        background: 'none'
     },
     media: {
         position: 'relative',
-        height: 230,
-        backgroundSize: 'cover'
+        height: 300,
+        backgroundSize: 'contain'
     },
     content: {
         width: '90%',
         bottom: 0,
         position: 'absolute',
-        backgroundColor: 'rgb(250, 250, 250, 0.7)',
+        backgroundColor: 'rgb(0, 0, 0, 0.3)',
         display: 'flex',
-        flexFlow: 'column'
-
+        flexFlow: 'column',
     },
     title: {
         overflow: 'hidden',
         textOverflow: 'ellipsis',
-        whiteSpace: 'nowrap'
-    }
+        whiteSpace: 'nowrap',
+        color: 'white'
+    },
+    title2: {
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+        color: '#dedede'
+    },
 });
 
 interface IProductCardProps {
     shopBrandId: number
-    address: number
+    address: string
 }
 
 const ShopCard = ({ shopBrandId, address }: IProductCardProps) => {
@@ -69,7 +76,7 @@ const ShopCard = ({ shopBrandId, address }: IProductCardProps) => {
                 <Typography gutterBottom variant="body1" component='h5' title={shopName} className={classes.title}>
                     {shopName}
                 </Typography>
-                <Typography variant="body2" color="textSecondary" component="p">
+                <Typography variant="body2" color="textSecondary" component="p" title={address} className={classes.title2}>
                     Address: {address}
                 </Typography>
             </CardContent>
