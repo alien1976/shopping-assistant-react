@@ -21,5 +21,5 @@ export const PRODUCTS = [
 ]
 export const SHOPS_BRANDS = [
     { id: 1, name: 'Balla', shopsIds: [1, 2], productsIds: [1, 2, 3, 4, 5], image: ballaImageUrl },
-    { id: 2, name: 'Kaaufland', shopsIds: [3, 4], productsIds: [], image: KaauflandImageUrl }
+    { id: 2, name: 'Kaaufland', shopsIds: [3, 4], productsIds: [6, 7], image: KaauflandImageUrl }
 ]

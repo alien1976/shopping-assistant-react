@@ -9,10 +9,14 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
 import ShoppingCartOutlinedIcon from '@material-ui/icons/ShoppingCartOutlined';
+import { CARD_WIDTH, CARD_HEIGHT } from '../../globals/constants';
+import CardLoader from '../Loaders/CardLoader';
+import { useProducts } from '../../services/products.service';
+import { IProduct } from '../../globals/interfaces';
 
 const useStyles = makeStyles({
     root: {
-        width: 300,
+        width: CARD_WIDTH,
         position: 'relative',
         marginBottom: 10,
         borderRadius: 0,
@@ -20,7 +24,7 @@ const useStyles = makeStyles({
     },
     media: {
         position: 'relative',
-        height: 300,
+        height: CARD_HEIGHT,
         backgroundSize: 'cover'
     },
     content: {
@@ -47,7 +51,7 @@ const useStyles = makeStyles({
         width: '80%'
     },
     cardActions: {
-        width: '20%',
+        width: '25%',
         display: 'flex',
         flexFlow: 'row',
         alignItems: 'center'
@@ -58,31 +62,47 @@ const useStyles = makeStyles({
 });
 
 interface IProductCardProps {
-    name: string
-    image: string
-    price: number
+    productId: string
 }
 
-const ProductCard = ({ name, image, price }: IProductCardProps) => {
+const ProductCard = ({ productId }: IProductCardProps) => {
+    const products = useProducts();
     const classes = useStyles();
+    const [productImage, setProductImage] = React.useState('');
+    const [productName, setProductName] = React.useState('');
+    const [productPrice, setProductPrice] = React.useState(0);
+
+    React.useEffect(() => {
+        products.getProduct(productId).then((product: IProduct) => {
+            setProductImage(product.image);
+            setProductName(product.name);
+            setProductPrice(product.price);
+        })
+    }, [])
+    const mediaLoaded = !!productImage && !!productName;
 
     return (
         <Card className={classes.root}>
             <CardActionArea>
-                <CardMedia
-                    className={classes.media}
-                    image={image}
-                    title={name}
-                    component="div"
-                />
+                {!mediaLoaded ?
+                    <div className={classes.media}>
+                        <CardLoader loaded={mediaLoaded} />
+                    </div> :
+                    <CardMedia
+                        className={classes.media}
+                        image={productImage}
+                        title={name}
+                        component="div"
+                    />
+                }
             </CardActionArea>
             <CardContent className={classes.content}>
                 <div className={classes.infoHolder}>
                     <Typography gutterBottom variant="body1" component='h5' title={name} className={classes.title}>
-                        {name}
+                        {productName || '...'}
                     </Typography>
                     <Typography variant="body2" color="textSecondary" component="p" className={classes.title2}>
-                        {price} lv.
+                        {productPrice || '...'} lv.
                 </Typography>
                 </div>
                 <CardActions className={classes.cardActions}>
@@ -98,4 +118,4 @@ const ProductCard = ({ name, image, price }: IProductCardProps) => {
     )
 }
 
-export default ProductCard;
+export default React.memo(ProductCard);

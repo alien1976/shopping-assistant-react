@@ -30,7 +30,6 @@ export const useShops = () => {
 };
 
 const getAllShops = async () => {
-    await timeout(1000)
     return SHOPS;
 }
 

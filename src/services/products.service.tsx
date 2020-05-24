@@ -29,7 +29,6 @@ export const useProducts = () => {
 };
 
 const getAllProducts = async () => {
-    await timeout(1000)
     return PRODUCTS;
 }
 

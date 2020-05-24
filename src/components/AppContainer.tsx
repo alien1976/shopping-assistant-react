@@ -4,6 +4,8 @@ import { ProductsProvider } from "../services/products.service"
 import PopularShops from "./Shops/PopularShops"
 import LatestProducts from './Products/LatestProducts';
 import { Switch, Route } from "react-router-dom";
+import AllProducts from './AllProducts/AllProducts';
+import { ShopBrandsProvider } from '../services/shopBrands.service';
 
 const Home = () => {
     return (
@@ -31,6 +33,13 @@ const AppContainer = () => {
             <Switch>
                 <Route exact path="/">
                     <Home></Home>
+                </Route>
+                <Route path="/products">
+                    <ProductsProvider>
+                        <ShopBrandsProvider>
+                            <AllProducts></AllProducts>
+                        </ShopBrandsProvider>
+                    </ProductsProvider>
                 </Route>
                 <Route component={NotFound} />
             </Switch>

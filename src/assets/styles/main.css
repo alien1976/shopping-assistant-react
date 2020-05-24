@@ -12,11 +12,11 @@ body, html {
 a {
     text-decoration: none;
     color: white;
-    width: 100%;
 }
 
 .active-link {
     background-color: #595959;
+    display: block;
 }
 
 #container {
@@ -48,4 +48,20 @@ a {
     flex-direction: row;
     flex-wrap: wrap;
     padding-left: 10px;
+}
+
+.products-grid.offset-top {
+    padding-top: 80px;
+}
+
+.filter-bar {
+    background: rgba(221, 221, 221, 1);
+    position: fixed;
+    z-index: 100;
+    top: 5;
+    width: 100%;
+    display: flex;
+    justify-content: start;
+    align-content: start;
+    min-height: 50px;
 }

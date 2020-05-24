@@ -7,10 +7,12 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 import { useShops } from '../../services/shops.service';
 import { IShopBrand } from '../../globals/interfaces';
+import { CARD_WIDTH, CARD_HEIGHT } from '../../globals/constants';
+import CardLoader from '../Loaders/CardLoader';
 
 const useStyles = makeStyles({
     root: {
-        width: 300,
+        width: CARD_WIDTH,
         position: 'relative',
         marginBottom: 10,
         borderRadius: 0,
@@ -18,7 +20,7 @@ const useStyles = makeStyles({
     },
     media: {
         position: 'relative',
-        height: 300,
+        height: CARD_HEIGHT,
         backgroundSize: 'contain'
     },
     content: {
@@ -62,22 +64,29 @@ const ShopCard = ({ shopBrandId, address }: IProductCardProps) => {
         })
     }, [])
 
+    const mediaLoaded = !!shopImage && !!shopName;
+
     return (
         <Card className={classes.root}>
             <CardActionArea>
-                <CardMedia
-                    className={classes.media}
-                    image={shopImage}
-                    title={shopName}
-                    component="div"
-                />
+                {!mediaLoaded ?
+                    <div className={classes.media}>
+                        <CardLoader loaded={mediaLoaded} />
+                    </div> :
+                    <CardMedia
+                        className={classes.media}
+                        image={shopImage}
+                        title={shopName}
+                        component="div"
+                    />
+                }
             </CardActionArea>
             <CardContent className={classes.content}>
                 <Typography gutterBottom variant="body1" component='h5' title={shopName} className={classes.title}>
-                    {shopName}
+                    {shopName || '...'}
                 </Typography>
                 <Typography variant="body2" color="textSecondary" component="p" title={address} className={classes.title2}>
-                    Address: {address}
+                    Address: {address || '...'}
                 </Typography>
             </CardContent>
         </Card >

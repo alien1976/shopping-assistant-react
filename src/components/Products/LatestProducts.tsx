@@ -19,7 +19,7 @@ const LatestProducts = () => {
             <div className='products-grid'>
                 {latestProducts.map((product) => {
                     return (
-                        <ProductCard key={product.id} image={product.image} name={product.name} price={product.price} />
+                        <ProductCard key={product.id} productId={product.id} />
                     )
                 })}
             </div>
