@@ -132,7 +132,7 @@ const AllProducts = () => {
             <div className='products-grid offset-top'>
                 {filteredProducts.map((product) => {
                     return (
-                        <ProductCard key={product.id} productName={product.name} productImage={product.image} productPrice={product.price} />
+                        <ProductCard key={product.id} productId={product.id} productName={product.name} productImage={product.image} productPrice={product.price} />
                     )
                 })}
             </div>

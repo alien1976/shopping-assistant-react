@@ -1,5 +1,5 @@
 import { timeout } from "../utils/utils";
-import { PRODUCTS } from "../mock-data/shops";
+import { PRODUCTS, SHOPS_BRANDS, SHOPS } from "../mock-data/shops";
 import { IProduct } from "../globals/interfaces";
 
 import * as React from 'react';
@@ -12,6 +12,8 @@ export const ProductsProvider = (props: { children: React.ReactNode }) => {
     const value = {
         getAllProducts: getAllProducts,
         getProduct: getProduct,
+        getProductShopBrand: getProductShopBrand,
+        getProductShop: getProductShop,
         addProduct: addProduct,
         setProduct: setProduct,
         deleteProduct: deleteProduct
@@ -36,6 +38,20 @@ const getProduct = async (id: number) => {
     await timeout(1000);
     const productIndex = PRODUCTS.findIndex((el) => el.id === id)
     return PRODUCTS[productIndex];
+}
+
+const getProductShopBrand = async (id: number) => {
+    await timeout(1000);
+    const shopBrandIndex = SHOPS_BRANDS.findIndex((el) => el.productsIds.indexOf(id) !== -1)
+    return SHOPS_BRANDS[shopBrandIndex];
+}
+
+const getProductShop = async (id: number) => {
+    await timeout(1000);
+    const shopBrandIndex = SHOPS_BRANDS.findIndex((el) => el.productsIds.indexOf(id) !== -1)
+    const shopBrandId = SHOPS_BRANDS[shopBrandIndex].id;
+    const shopIndex = SHOPS.findIndex((el) => el.shopBrandId === shopBrandId)
+    return SHOPS[shopIndex];
 }
 
 const addProduct = async (value: IProduct) => {

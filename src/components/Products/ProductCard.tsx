@@ -11,6 +11,7 @@ import StarBorderIcon from '@material-ui/icons/StarBorder';
 import ShoppingCartOutlinedIcon from '@material-ui/icons/ShoppingCartOutlined';
 import { CARD_WIDTH, CARD_HEIGHT } from '../../globals/constants';
 import CardLoader from '../Loaders/CardLoader';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles({
     root: {
@@ -60,12 +61,13 @@ const useStyles = makeStyles({
 });
 
 interface IProductCardProps {
+    productId: string
     productImage: string
     productName: string
     productPrice: number
 }
 
-const ProductCard = ({ productImage, productName, productPrice }: IProductCardProps) => {
+const ProductCard = ({ productImage, productId, productName, productPrice }: IProductCardProps) => {
     const classes = useStyles();
     const mediaLoaded = !!productImage && !!productName;
 
@@ -76,12 +78,14 @@ const ProductCard = ({ productImage, productName, productPrice }: IProductCardPr
                     <div className={classes.media}>
                         <CardLoader loaded={mediaLoaded} />
                     </div> :
-                    <CardMedia
-                        className={classes.media}
-                        image={productImage}
-                        title={name}
-                        component="div"
-                    />
+                    <Link to={`/products/${productId}`}>
+                        <CardMedia
+                            className={classes.media}
+                            image={productImage}
+                            title={name}
+                            component="div"
+                        />
+                    </Link>
                 }
             </CardActionArea>
             <CardContent className={classes.content}>
