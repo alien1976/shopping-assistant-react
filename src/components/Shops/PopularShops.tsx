@@ -5,10 +5,10 @@ import { useShops } from '../../services/shops.service';
 
 const PopularShops = () => {
     const shops = useShops();
-    const [latestShops, setLatestProducts] = React.useState([]);
+    const [latestShops, setLatestShops] = React.useState([]);
 
     React.useEffect(() => {
-        shops.getAllShops().then((shops: IShop[]) => setLatestProducts(shops.slice(Math.max(shops.length - 5, 0))))
+        shops.getAllShops().then((shops: IShop[]) => setLatestShops(shops.slice(Math.max(shops.length - 5, 0))))
     }, [])
 
     return (

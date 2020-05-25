@@ -11,8 +11,6 @@ import StarBorderIcon from '@material-ui/icons/StarBorder';
 import ShoppingCartOutlinedIcon from '@material-ui/icons/ShoppingCartOutlined';
 import { CARD_WIDTH, CARD_HEIGHT } from '../../globals/constants';
 import CardLoader from '../Loaders/CardLoader';
-import { useProducts } from '../../services/products.service';
-import { IProduct } from '../../globals/interfaces';
 
 const useStyles = makeStyles({
     root: {
@@ -62,23 +60,13 @@ const useStyles = makeStyles({
 });
 
 interface IProductCardProps {
-    productId: string
+    productImage: string
+    productName: string
+    productPrice: number
 }
 
-const ProductCard = ({ productId }: IProductCardProps) => {
-    const products = useProducts();
+const ProductCard = ({ productImage, productName, productPrice }: IProductCardProps) => {
     const classes = useStyles();
-    const [productImage, setProductImage] = React.useState('');
-    const [productName, setProductName] = React.useState('');
-    const [productPrice, setProductPrice] = React.useState(0);
-
-    React.useEffect(() => {
-        products.getProduct(productId).then((product: IProduct) => {
-            setProductImage(product.image);
-            setProductName(product.name);
-            setProductPrice(product.price);
-        })
-    }, [])
     const mediaLoaded = !!productImage && !!productName;
 
     return (

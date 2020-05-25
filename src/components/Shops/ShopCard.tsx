@@ -58,7 +58,6 @@ const ShopCard = ({ shopBrandId, address }: IProductCardProps) => {
 
     React.useEffect(() => {
         shops.getShopBrand(shopBrandId).then((shopBrand: IShopBrand) => {
-            console.log(shopBrand)
             setShopImage(shopBrand.image);
             setShopName(shopBrand.name);
         })
