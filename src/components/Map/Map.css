@@ -1,0 +1,69 @@
+.map img, .map svg {
+    position: relative;
+}
+
+.map-wrapper {
+    background: black no-repeat center;
+    background-size: cover;
+    width: 500px;
+    height: 488px;
+    margin: 0 auto;
+    position: relative;
+}
+
+.progress-bar {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.loader {
+    width: 10%;
+    height: 10%;
+}
+
+.draggable {
+    fill: green;
+    cursor: move;
+}
+
+.active-mode {
+    border: 1px solid green;
+}
+
+.adding-points {
+    cursor: crosshair;
+}
+
+.no-crosshair-cursor {
+    cursor: default;
+}
+
+.click-cursor {
+    cursor: pointer;
+}
+
+.disabled-cursor {
+    cursor: not-allowed;
+}
+
+.delete-cursor {
+    cursor: pointer;
+}
+
+.removable-points-color {
+    fill: red;
+}
+
+.connecting-points-color {
+    fill: orange;
+}
+
+.removable-lines-color {
+    fill: red;
+}

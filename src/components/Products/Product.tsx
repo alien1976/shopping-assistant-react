@@ -16,6 +16,7 @@ import { Paper, Grid, ButtonBase } from '@material-ui/core';
 import { IProduct, IShop, IShopBrand } from '../../globals/interfaces';
 import { useProducts } from '../../services/products.service';
 import ItemLoader from '../Loaders/ItemLoader';
+import ProductLocationMap from '../Map/ProductLocationMap';
 
 // const useStyles = makeStyles({
 //     root: {
@@ -151,9 +152,11 @@ const Product = () => {
                                 </Grid>
                                 <Grid item>
                                     <Typography variant="body1" gutterBottom>
-                                        Shop location:
+                                        Product location in shop:
                                     </Typography>
-                                    Map
+                                </Grid>
+                                <Grid item>
+                                    <ProductLocationMap productCoordinates={product.coordinates} mapImgUrl={productShop.mapImage} />
                                 </Grid>
                             </Grid>
                             <Grid item>

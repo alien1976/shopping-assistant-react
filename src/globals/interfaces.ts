@@ -4,6 +4,7 @@ export interface IProduct {
     price: number
     image: string
     description?: string
+    coordinates: string
 }
 
 export interface IShop {
@@ -11,6 +12,7 @@ export interface IShop {
     shopBrandId: number;
     address: string;
     map: {};
+    mapImage: string
 }
 
 export interface IShopBrand {

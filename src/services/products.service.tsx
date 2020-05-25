@@ -35,19 +35,17 @@ const getAllProducts = async () => {
 }
 
 const getProduct = async (id: number) => {
-    await timeout(1000);
+    // await timeout(1000);
     const productIndex = PRODUCTS.findIndex((el) => el.id === id)
     return PRODUCTS[productIndex];
 }
 
 const getProductShopBrand = async (id: number) => {
-    await timeout(1000);
     const shopBrandIndex = SHOPS_BRANDS.findIndex((el) => el.productsIds.indexOf(id) !== -1)
     return SHOPS_BRANDS[shopBrandIndex];
 }
 
 const getProductShop = async (id: number) => {
-    await timeout(1000);
     const shopBrandIndex = SHOPS_BRANDS.findIndex((el) => el.productsIds.indexOf(id) !== -1)
     const shopBrandId = SHOPS_BRANDS[shopBrandIndex].id;
     const shopIndex = SHOPS.findIndex((el) => el.shopBrandId === shopBrandId)
