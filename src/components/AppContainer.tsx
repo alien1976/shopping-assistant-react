@@ -7,6 +7,8 @@ import Product from './Products/Product';
 import { ProductsProvider } from '../services/products.service';
 import { ShopBrandsProvider } from '../services/shopBrands.service';
 import { ShopsProvider } from '../services/shops.service';
+import ShoppingCart from './ShoppingCart/ShoppingCart';
+import ShoppingNavigation from './ShoppingCart/ShoppingNavigation';
 
 const Home = () => {
     return (
@@ -39,6 +41,12 @@ const AppContainer = () => {
                             </Route>
                             <Route path="/products">
                                 <AllProducts></AllProducts>
+                            </Route>
+                            <Route path="/shopping-cart/:id">
+                                <ShoppingNavigation></ShoppingNavigation>
+                            </Route>
+                            <Route path="/shopping-cart">
+                                <ShoppingCart></ShoppingCart>
                             </Route>
                             <Route component={NotFound} />
                         </Switch>

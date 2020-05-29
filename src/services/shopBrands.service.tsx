@@ -33,7 +33,7 @@ const getAllShopBrands = async () => {
 }
 
 const getShopBrand = async (id: number) => {
-    await timeout(1000);
+    // await timeout(1000);
     const shopBrandIndex = SHOPS_BRANDS.findIndex((el) => el.id === id)
     return SHOPS_BRANDS[shopBrandIndex];
 }

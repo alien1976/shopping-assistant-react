@@ -9,9 +9,14 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
 import ShoppingCartOutlinedIcon from '@material-ui/icons/ShoppingCartOutlined';
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import { CARD_WIDTH, CARD_HEIGHT } from '../../globals/constants';
 import CardLoader from '../Loaders/CardLoader';
 import { Link } from 'react-router-dom';
+import { addProductToCart, removeProductFromCart } from '../../redux/cartReducer';
+import { useSelector, useDispatch } from 'react-redux';
+import { IStoreState } from '../../redux/store';
+import { IProduct } from '../../globals/interfaces';
 
 const useStyles = makeStyles({
     root: {
@@ -61,15 +66,23 @@ const useStyles = makeStyles({
 });
 
 interface IProductCardProps {
-    productId: string
-    productImage: string
-    productName: string
-    productPrice: number
+    product: IProduct
 }
 
-const ProductCard = ({ productImage, productId, productName, productPrice }: IProductCardProps) => {
+const ProductCard = ({ product }: IProductCardProps) => {
+    const { image, id, name, price } = product;
     const classes = useStyles();
-    const mediaLoaded = !!productImage && !!productName;
+    const isInCart = useSelector((state: IStoreState) => state.appState.cart.indexOf(id.toString()) !== -1);
+    const dispatch = useDispatch();
+    const mediaLoaded = !!image && !!name;
+
+    const productToCartToggle = () => {
+        if (isInCart) {
+            dispatch(removeProductFromCart(id.toString()));
+        } else {
+            dispatch(addProductToCart(id.toString()));
+        }
+    }
 
     return (
         <Card className={classes.root}>
@@ -78,10 +91,10 @@ const ProductCard = ({ productImage, productId, productName, productPrice }: IPr
                     <div className={classes.media}>
                         <CardLoader loaded={mediaLoaded} />
                     </div> :
-                    <Link to={`/products/${productId}`}>
+                    <Link to={`/products/${id}`}>
                         <CardMedia
                             className={classes.media}
-                            image={productImage}
+                            image={image}
                             title={name}
                             component="div"
                         />
@@ -91,18 +104,20 @@ const ProductCard = ({ productImage, productId, productName, productPrice }: IPr
             <CardContent className={classes.content}>
                 <div className={classes.infoHolder}>
                     <Typography gutterBottom variant="body1" component='h5' title={name} className={classes.title}>
-                        {productName || '...'}
+                        {name || '...'}
                     </Typography>
                     <Typography variant="body2" color="textSecondary" component="p" className={classes.title2}>
-                        {productPrice || '...'} lv.
+                        {price || '...'} lv.
                 </Typography>
                 </div>
                 <CardActions className={classes.cardActions}>
                     <IconButton aria-label="delete" size="small" className={classes.iconButton}>
                         <StarBorderIcon />
                     </IconButton>
-                    <IconButton aria-label="add-to-cart" size="small" className={classes.iconButton}>
-                        <ShoppingCartOutlinedIcon />
+                    <IconButton aria-label="add-to-cart" size="small" onClick={productToCartToggle} className={classes.iconButton}>
+                        {isInCart ?
+                            <ShoppingCartIcon />
+                            : <ShoppingCartOutlinedIcon />}
                     </IconButton>
                 </CardActions>
             </CardContent>

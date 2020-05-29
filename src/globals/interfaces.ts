@@ -5,11 +5,14 @@ export interface IProduct {
     image: string
     description?: string
     coordinates: string
+    shopBrandId: number
+    shopId: number
 }
 
 export interface IShop {
     id: number;
     shopBrandId: number;
+    name: string;
     address: string;
     map: {};
     mapImage: string
