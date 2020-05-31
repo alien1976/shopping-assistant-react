@@ -8,6 +8,7 @@
 
 .map-route-scale {
     width: 100%; /*500px */
+    position: relative;
 }
 
 .progress-bar {

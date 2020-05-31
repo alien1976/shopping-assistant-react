@@ -9,6 +9,7 @@ import { ShopBrandsProvider } from '../services/shopBrands.service';
 import { ShopsProvider } from '../services/shops.service';
 import ShoppingCart from './ShoppingCart/ShoppingCart';
 import ShoppingNavigation from './ShoppingCart/ShoppingNavigation';
+import AllShops from './AllShops/AllShops';
 
 const Home = () => {
     return (
@@ -41,6 +42,12 @@ const AppContainer = () => {
                             </Route>
                             <Route path="/products">
                                 <AllProducts></AllProducts>
+                            </Route>
+                            {/* <Route path="/shops/:id">
+                                <AllShops></AllShops>
+                            </Route> */}
+                            <Route path="/shops">
+                                <AllShops></AllShops>
                             </Route>
                             <Route path="/shopping-cart/:id">
                                 <ShoppingNavigation></ShoppingNavigation>

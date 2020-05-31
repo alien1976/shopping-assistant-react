@@ -65,7 +65,7 @@ const MapPathFinder = ({ products, mapImgUrl, loadProcess, startPoint }: IMapPat
         <div className="map-wrapper">
             {loading &&
                 <div className='progress-bar'>
-                    <CircularProgress style={loaderStyles} />
+                    <CircularProgress style={loaderStyles} value={0} />
                     <span>Calculating path. Please wait... </span>
                 </div>
             }
@@ -79,10 +79,12 @@ const MapPathFinder = ({ products, mapImgUrl, loadProcess, startPoint }: IMapPat
                             drawnLines.push(value + ',' + fastestPath[index + 1]);
                             const [x1, y1] = value.split(',');
                             const [x2, y2] = fastestPath[index + 1].split(',');
+                            const anchorPointsRadius = routeScale - (4 * 2);
+
                             return (
                                 <React.Fragment key={'shortest-path-(' + value + ',' + fastestPath[index + 1] + ')'}>
                                     <line x1={x1} x2={x2} y1={y1} y2={y2} strokeLinecap="round" fill={PATH_LINE_FILL_COLOR} stroke={PATH_LINE_STROKE_COLOR} strokeWidth={routeScale - 4}></line>
-                                    {products.indexOf(value) === -1 && <circle cx={x1} cy={y1} r={routeScale - (4 * 2)} fill={ANCHOR_POINT_COLOR} stroke={ANCHOR_POINT_STROKE}></circle>}
+                                    {products.indexOf(value) === -1 && <circle cx={x1} cy={y1} r={anchorPointsRadius > -1 ? anchorPointsRadius : 0} fill={ANCHOR_POINT_COLOR} stroke={ANCHOR_POINT_STROKE}></circle>}
                                     {/* {products.indexOf(fastestPath[index + 1]) !== -1 && <circle cx={x2} cy={y2} r={routeScale - 2} fill={POINT_COLOR} stroke={POINT_STROKE}></circle>} */}
                                 </React.Fragment>
                             )

@@ -55,10 +55,10 @@ const MenuDrawer = ({ isOpened, toggleDrawer }: IMenuDrawerProps) => {
                             <ListItemText className={classes.button} primary="All products" />
                         </ListItem>
                     </NavLink>
-                    <NavLink activeClassName="active-link" to="/shop-brands">
+                    <NavLink activeClassName="active-link" to="/shops">
                         <ListItem button>
                             <StorefrontIcon></StorefrontIcon>
-                            <ListItemText className={classes.button} primary="Shop brands" />
+                            <ListItemText className={classes.button} primary="All shops" />
                         </ListItem>
                     </NavLink>
                 </List>
