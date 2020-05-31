@@ -30,6 +30,9 @@ const useStyles = makeStyles((theme: Theme) =>
             maxWidth: '100%',
             maxHeight: '200px',
         },
+        map: {
+            width: '100%'
+        }
     }),
 );
 
@@ -99,7 +102,7 @@ const Product = () => {
                                         Product location in shop:
                                     </Typography>
                                 </Grid>
-                                <Grid item>
+                                <Grid item className={classes.map}>
                                     <ProductLocationMap productCoordinates={product.coordinates} mapImgUrl={productShop.mapImage} />
                                 </Grid>
                             </Grid>

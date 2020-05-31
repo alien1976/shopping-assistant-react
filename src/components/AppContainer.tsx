@@ -10,6 +10,7 @@ import { ShopsProvider } from '../services/shops.service';
 import ShoppingCart from './ShoppingCart/ShoppingCart';
 import ShoppingNavigation from './ShoppingCart/ShoppingNavigation';
 import AllShops from './AllShops/AllShops';
+import Shop from './Shops/Shop';
 
 const Home = () => {
     return (
@@ -43,9 +44,9 @@ const AppContainer = () => {
                             <Route path="/products">
                                 <AllProducts></AllProducts>
                             </Route>
-                            {/* <Route path="/shops/:id">
-                                <AllShops></AllShops>
-                            </Route> */}
+                            <Route path="/shops/:id">
+                                <Shop></Shop>
+                            </Route>
                             <Route path="/shops">
                                 <AllShops></AllShops>
                             </Route>

@@ -6,6 +6,7 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { useShopBrands } from '../../services/shopBrands.service';
 import { useShops } from '../../services/shops.service';
 import ShopCard from '../Shops/ShopCard';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -92,7 +93,9 @@ const AllShops = () => {
             <div className='products-grid offset-top'>
                 {filteredShops.map((shop: IShop) => {
                     return (
-                        <ShopCard key={shop.id} shopBrandId={shop.shopBrandId} address={shop.address} />
+                        <Link key={shop.id} to={`/shops/${shop.id}`}>
+                            <ShopCard shopId={shop.id} shopBrandId={shop.shopBrandId} address={shop.address} />
+                        </Link>
                     )
                 })}
             </div>

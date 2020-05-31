@@ -11,6 +11,7 @@ const ProductLocationMap = ({ productCoordinates, mapImgUrl }: { productCoordina
         return {
             cursor: '',
             backgroundImage: `url(${mapImgUrl})`,
+            backgroundColor: 'black'
         }
     }, [mapImgUrl])
 

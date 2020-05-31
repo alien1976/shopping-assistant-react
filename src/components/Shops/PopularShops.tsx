@@ -2,6 +2,7 @@ import * as React from 'react';
 import { IShop } from '../../globals/interfaces';
 import ShopCard from './ShopCard';
 import { useShops } from '../../services/shops.service';
+import { Link } from 'react-router-dom';
 
 const PopularShops = () => {
     const shops = useShops();
@@ -19,7 +20,9 @@ const PopularShops = () => {
             <div className='products-grid'>
                 {latestShops.map((shop) => {
                     return (
-                        <ShopCard key={shop.id} shopBrandId={shop.shopBrandId} address={shop.address} />
+                        <Link key={shop.id} to={`/shops/${shop.id}`}>
+                            <ShopCard shopId={shop.id} shopBrandId={shop.shopBrandId} address={shop.address} />
+                        </Link>
                     )
                 })}
             </div>

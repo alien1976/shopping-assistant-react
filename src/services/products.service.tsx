@@ -12,6 +12,7 @@ export const ProductsProvider = (props: { children: React.ReactNode }) => {
     const value = {
         getAllProducts: getAllProducts,
         getProduct: getProduct,
+        getAllProductsByShopId: getAllProductsByShopId,
         getProductShopBrand: getProductShopBrand,
         getProductShop: getProductShop,
         addProduct: addProduct,
@@ -32,6 +33,10 @@ export const useProducts = () => {
 
 const getAllProducts = async () => {
     return PRODUCTS;
+}
+
+const getAllProductsByShopId = async (shopId: number) => {
+    return PRODUCTS.filter((el) => el.shopId === shopId);
 }
 
 const getProduct = async (id: number) => {

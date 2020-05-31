@@ -9,6 +9,7 @@ import { useShops } from '../../services/shops.service';
 import { IShopBrand } from '../../globals/interfaces';
 import { CARD_WIDTH, CARD_HEIGHT } from '../../globals/constants';
 import CardLoader from '../Loaders/CardLoader';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles({
     root: {
@@ -47,10 +48,11 @@ const useStyles = makeStyles({
 
 interface IProductCardProps {
     shopBrandId: number
+    shopId: number
     address: string
 }
 
-const ShopCard = ({ shopBrandId, address }: IProductCardProps) => {
+const ShopCard = ({ shopBrandId, shopId, address }: IProductCardProps) => {
     const shops = useShops();
     const classes = useStyles();
     const [shopImage, setShopImage] = React.useState('');
@@ -75,10 +77,9 @@ const ShopCard = ({ shopBrandId, address }: IProductCardProps) => {
                     <CardMedia
                         className={classes.media}
                         image={shopImage}
-                        title={shopName}
+                        title={name}
                         component="div"
-                    />
-                }
+                    />}
             </CardActionArea>
             <CardContent className={classes.content}>
                 <Typography gutterBottom variant="body1" component='h5' title={shopName} className={classes.title}>

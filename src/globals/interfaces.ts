@@ -17,6 +17,7 @@ export interface IShop {
     map: {};
     mapImage: string
     mapEntryPoint: string
+    shopGoogleMapsSrc: string
 }
 
 export interface IShopBrand {

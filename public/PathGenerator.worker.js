@@ -215,7 +215,7 @@ const findPath = (adjList, entryPoint, products) => {
     // postMessage({ finish: false, currentProgress: (currentProgress / maxProgress) * 100 })
 
     const graph = { ...pathGraph, ...productsGraph };
-    const path = findShortestPath(graph, closestGraphEntryPoint, products);
+    const path = findShortestPath(graph, entryPoint, products);
     postMessage({ path: path, finish: true })
 }
 

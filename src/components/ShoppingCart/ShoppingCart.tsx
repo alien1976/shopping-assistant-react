@@ -6,7 +6,7 @@ import { useProducts } from '../../services/products.service';
 import ItemLoader from '../Loaders/ItemLoader';
 import ShopCard from '../Shops/ShopCard';
 import { useShops } from '../../services/shops.service';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { selectCart } from '../../redux/cartReducer';
 
 const ShoppingChart = () => {
@@ -81,7 +81,7 @@ const ShoppingChart = () => {
                                         search: '',
                                         state: { products: getShopBrandCartProducts(shop.id), shop: shop }
                                     }}>
-                                    <ShopCard key={shop.id} shopBrandId={shop.shopBrandId} address={shop.address} />
+                                    <ShopCard key={shop.id} shopId={shop.id} shopBrandId={shop.shopBrandId} address={shop.address} />
                                 </Link>
                             </Badge>
                         )
