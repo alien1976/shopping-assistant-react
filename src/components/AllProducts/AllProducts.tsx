@@ -62,7 +62,6 @@ const AllProducts = () => {
     }
 
     const sortProducts = (products: IProduct[]) => {
-        console.log(searchByValue)
         switch (searchByValue) {
             case 'low-high': {
                 products.sort((a: IProduct, b: IProduct) => {

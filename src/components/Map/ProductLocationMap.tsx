@@ -6,7 +6,6 @@ const POINT_STROKE = 'white';
 
 const ProductLocationMap = ({ productCoordinates, mapImgUrl }: { productCoordinates: string, mapImgUrl: string }) => {
     const [x1, y1] = productCoordinates.split(',');
-    console.log(mapImgUrl)
 
     const mapStyles = React.useMemo(() => {
         return {

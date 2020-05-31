@@ -6,9 +6,10 @@ import { Paper, Grid, List, ListItem, ListItemAvatar, Avatar, ListItemText, List
 import { IProduct, IShop } from '../../globals/interfaces';
 import ItemLoader from '../Loaders/ItemLoader';
 import ProductLocationMap from '../Map/ProductLocationMap';
-import { useDispatch } from 'react-redux';
-import { removeProductFromCart, addProductToCart } from '../../redux/cartReducer';
+import { useDispatch, useSelector } from 'react-redux';
+import { removeProductFromCart, addProductToCart, selectFastestPath, setFastestPath } from '../../redux/cartReducer';
 import { useParams, useLocation } from 'react-router-dom';
+import MapPathFinder from '../Map/MapPathFinder';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -68,7 +69,8 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         mapGrid: {
             display: 'flex',
-            justifyContent: 'center',
+            flexFlow: 'column',
+            // justifyContent: 'center',
             alignItems: 'center'
         }
     }),
@@ -81,29 +83,92 @@ interface IShoppingNavigationProps {
 
 const ShoppingNavigation = () => {
     const location = useLocation<IShoppingNavigationProps>();
-    console.log('inn', location)
+
+    if (!location.state) {
+        return <h1>Invalid URL.</h1>
+    }
+
+    const fastestPath = useSelector(selectFastestPath);
     const shop = location.state.shop;
     const classes = useStyles();
     const dispatch = useDispatch();
+    const findingPath = React.useRef(false);
+    const startPoint = React.useRef(shop.mapEntryPoint);
+    const [loadProcess, setLoadProcess] = React.useState(false);
     const [availableProducts, setAvailableProducts] = React.useState(location.state.products.filter((el) => !el.bought));
     const [boughtProducts, setBoughtProducts] = React.useState(location.state.products.filter((el) => el.bought));
 
+    const changeAvailableProductsOrder = () => {
+        const reorderedProducts: (IProduct & { bought: boolean })[] = [];
+
+        for (let product of fastestPath) {
+            const availableProduct = availableProducts.find((el) => el.coordinates === product);
+            if (availableProduct && reorderedProducts.findIndex((el) => el.id === availableProduct.id) === -1) {
+                reorderedProducts.push(availableProduct)
+            }
+        }
+
+        return reorderedProducts;
+    }
+
+    const [orderedAvailableProducts, setOrderedAvailableProducts] = React.useState(changeAvailableProductsOrder());
+
+    React.useEffect(() => {
+        if (!boughtProducts.length) startPoint.current = shop.mapEntryPoint;
+        // else startPoint.current = orderedAvailableProducts[0].coordinates;
+    }, [boughtProducts])
+
+    React.useEffect(() => {
+        setOrderedAvailableProducts(changeAvailableProductsOrder())
+    }, [fastestPath, availableProducts])
+
+    React.useEffect(() => {
+        findPath();
+    }, [availableProducts]);
+
+    const findPath = React.useCallback(() => {
+        if (findingPath.current) return;
+        setLoadProcess(true);
+        findingPath.current = true;
+        const pathGeneratorWorker = new Worker('./PathGenerator.worker.js');
+        pathGeneratorWorker.onerror = (error) => {
+            findingPath.current = false;
+            pathGeneratorWorker.terminate();
+            setLoadProcess(false);
+            console.log(error)
+        }
+        pathGeneratorWorker.onmessage = (e) => {
+            if (!e.data.finish) {
+                return;
+            }
+            dispatch(setFastestPath(e.data.path))
+            pathGeneratorWorker.terminate();
+            findingPath.current = false;
+            setLoadProcess(false);
+        }
+        pathGeneratorWorker.postMessage({ mapPath: shop.map, mapEntryPoint: startPoint.current, products: availableProducts.map((el) => el.coordinates) });
+    }, [availableProducts])
+
     const toggleProduct = (event: React.MouseEvent<HTMLLIElement>) => {
+        if (findingPath.current) return;
         const productId = parseInt(event.currentTarget.dataset.id);
         const productIsAvailable = event.currentTarget.dataset.isavailable === 'true';
         const product = productIsAvailable ?
             availableProducts.find((el) => el.id === productId) :
             boughtProducts.find((el) => el.id === productId);
 
+        startPoint.current = product.coordinates;
+
         if (productIsAvailable) {
             setAvailableProducts(availableProducts.filter((el) => el.id !== productId));
             setBoughtProducts([product, ...boughtProducts]);
-            dispatch(removeProductFromCart(product.id))
+            dispatch(removeProductFromCart(product.id.toString()))
         } else {
             setBoughtProducts(boughtProducts.filter((el) => el.id !== productId));
             setAvailableProducts([product, ...availableProducts]);
-            dispatch(addProductToCart(product.id))
+            dispatch(addProductToCart(product.id.toString()))
         }
+
     }
 
     const mediaLoaded = !!availableProducts && !!boughtProducts;
@@ -112,16 +177,21 @@ const ShoppingNavigation = () => {
         <div className={classes.root}>
             {mediaLoaded ?
                 <Paper className={classes.paper}>
-                    <Typography variant="h4">Currently shopping in: {shop.name}</Typography>
-                    <Typography variant="h5">{shop.address}</Typography>
+                    <Typography variant="h5">Currently shopping in: {shop.name}</Typography>
+                    <Typography>{shop.address}</Typography>
                     <Grid container spacing={4}>
-                        <Grid item xs={12} md={7} className={classes.mapGrid}>
-                            <ProductLocationMap mapImgUrl={shop.mapImage} productCoordinates={(availableProducts && availableProducts[0] && availableProducts[0].coordinates) || '0,0'}></ProductLocationMap>
+                        <Grid item xs={12} md={8} lg={6} className={classes.mapGrid}>
+                            <MapPathFinder
+                                mapImgUrl={shop.mapImage}
+                                products={orderedAvailableProducts.map((el) => el.coordinates)}
+                                loadProcess={loadProcess}
+                                startPoint={startPoint.current} />
                         </Grid>
-                        <Grid item xs={12} md={5}>
+                        <Grid item xs={12} md={4} lg={6}>
+                            <Typography variant='h5' className={classes.label}>Products to buy:</Typography>
+                            <Typography className={classes.label}>Total products price: {availableProducts.reduce((a, b) => a + b.price, 0)} lv.</Typography>
                             <List>
-                                <Typography className={classes.label}>Products to buy:</Typography>
-                                {availableProducts.map((product: IProduct, index: number) => {
+                                {orderedAvailableProducts.map((product: IProduct, index: number) => {
                                     return (<ListItem onClick={toggleProduct} data-id={product.id} data-isavailable={true}
                                         key={product.id} className={classes.listItem}>
                                         <ListItemAvatar>
@@ -134,17 +204,12 @@ const ShoppingNavigation = () => {
                                             primary={`${index + 1}. ${product.name}`}
                                             secondary={'Price:' + product.price}
                                         />
-                                        <ListItemSecondaryAction>
-                                            <IconButton edge="end" aria-label="delete">
-                                                {/* <DeleteIcon /> */}
-                                            </IconButton>
-                                        </ListItemSecondaryAction>
                                     </ListItem>)
                                 })}
                             </List>
-                            <Typography className={classes.label}>Total: {availableProducts.reduce((a, b) => a + b.price, 0)} lv.</Typography>
+                            <Typography variant='h5' className={classes.label}>Bought products:</Typography>
+                            <Typography className={classes.label}>Total money spent: {boughtProducts.reduce((a, b) => a + b.price, 0)} lv.</Typography>
                             <List>
-                                <Typography className={classes.label}>Bought products:</Typography>
                                 {boughtProducts.map((product: IProduct, index: number) => {
                                     return (<ListItem onClick={toggleProduct} data-id={product.id} data-isavailable={false}
                                         key={product.id} className={classes.listItemBought}>
@@ -158,15 +223,9 @@ const ShoppingNavigation = () => {
                                             primary={product.name}
                                             secondary={'Price:' + product.price}
                                         />
-                                        <ListItemSecondaryAction>
-                                            <IconButton edge="end" aria-label="delete">
-                                                {/* <DeleteIcon /> */}
-                                            </IconButton>
-                                        </ListItemSecondaryAction>
                                     </ListItem>)
                                 })}
                             </List>
-                            <Typography className={classes.label}>Spent: {boughtProducts.reduce((a, b) => a + b.price, 0)} lv.</Typography>
                         </Grid>
                     </Grid>
                 </Paper>

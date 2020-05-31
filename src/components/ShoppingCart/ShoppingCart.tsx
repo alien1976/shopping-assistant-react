@@ -4,11 +4,10 @@ import { Badge } from '@material-ui/core';
 import { IProduct, IShop } from '../../globals/interfaces';
 import { useProducts } from '../../services/products.service';
 import ItemLoader from '../Loaders/ItemLoader';
-import ShoppingNavigation from './ShoppingNavigation';
 import ShopCard from '../Shops/ShopCard';
 import { useShops } from '../../services/shops.service';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectCart, initProductList } from '../../redux/cartReducer';
+import { selectCart } from '../../redux/cartReducer';
 
 const ShoppingChart = () => {
     const history = useHistory();

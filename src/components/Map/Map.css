@@ -3,12 +3,11 @@
 }
 
 .map-wrapper {
-    background: black no-repeat center;
-    background-size: cover;
-    width: 500px;
-    height: 488px;
-    margin: 0 auto;
-    position: relative;
+    width: 100%; /*500px */
+}
+
+.map-route-scale {
+    width: 100%; /*500px */
 }
 
 .progress-bar {

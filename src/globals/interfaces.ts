@@ -16,6 +16,7 @@ export interface IShop {
     address: string;
     map: {};
     mapImage: string
+    mapEntryPoint: string
 }
 
 export interface IShopBrand {

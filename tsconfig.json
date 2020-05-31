@@ -11,6 +11,6 @@
     },
     "include": [
         "./src/**/**/*",
-        "./src/assets/**/**/*"
+        "./src/assets/**/**/*", "public/PathGenerator.worker.js"
     ]
 }
