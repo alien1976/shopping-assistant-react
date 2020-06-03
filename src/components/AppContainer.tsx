@@ -11,6 +11,7 @@ import ShoppingCart from './ShoppingCart/ShoppingCart';
 import ShoppingNavigation from './ShoppingCart/ShoppingNavigation';
 import AllShops from './AllShops/AllShops';
 import Shop from './Shops/Shop';
+import Login from './Users/Login';
 
 const Home = () => {
     return (
@@ -55,6 +56,9 @@ const AppContainer = () => {
                             </Route>
                             <Route path="/shopping-cart">
                                 <ShoppingCart></ShoppingCart>
+                            </Route>
+                            <Route path="/login">
+                                <Login></Login>
                             </Route>
                             <Route component={NotFound} />
                         </Switch>

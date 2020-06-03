@@ -5,6 +5,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
+import LockOpenIcon from '@material-ui/icons/LockOpen';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -14,7 +15,7 @@ import MenuDrawer from './MenuDrawer';
 import logo from '../../assets/favicon/favicon-32x32.png';
 import { Link } from 'react-router-dom';
 import { Badge } from '@material-ui/core';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { selectCartLength } from '../../redux/cartReducer';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -42,7 +43,7 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function MenuAppBar() {
   const classes = useStyles();
   const productsInCart = useSelector(selectCartLength);
-  const [auth, setAuth] = React.useState(true);
+  const [auth, setAuth] = React.useState(false);
   const [isDrawerOpened, setIsDrawerOpened] = React.useState(false)
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -80,7 +81,7 @@ export default function MenuAppBar() {
               </Badge>
             </Link>
           </IconButton>
-          {auth && (
+          {auth ? (
             <div>
               <IconButton
                 aria-label="account of current user"
@@ -108,9 +109,16 @@ export default function MenuAppBar() {
               >
                 <MenuItem onClick={handleClose}>Profile</MenuItem>
                 <MenuItem onClick={handleClose}>My account</MenuItem>
+                <MenuItem onClick={handleClose}>Sign out</MenuItem>
               </Menu>
             </div>
-          )}
+          ) : <div>
+              <IconButton>
+                <Link to='/login'>
+                  <LockOpenIcon />
+                </Link>
+              </IconButton>
+            </div>}
         </Toolbar>
         <MenuDrawer isOpened={isDrawerOpened} toggleDrawer={toggleDrawer}></MenuDrawer>
       </AppBar>
