@@ -12,6 +12,7 @@ import ShoppingNavigation from './ShoppingCart/ShoppingNavigation';
 import AllShops from './AllShops/AllShops';
 import Shop from './Shops/Shop';
 import Login from './Users/Login';
+import SignUp from './Users/SignUp';
 
 const Home = () => {
     return (
@@ -59,6 +60,9 @@ const AppContainer = () => {
                             </Route>
                             <Route path="/login">
                                 <Login></Login>
+                            </Route>
+                            <Route path="/sign-up">
+                                <SignUp></SignUp>
                             </Route>
                             <Route component={NotFound} />
                         </Switch>
