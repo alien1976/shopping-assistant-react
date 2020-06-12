@@ -4,6 +4,7 @@ import MenuAppBar from './MenuAppBar/MenuAppBar';
 import { HashRouter as Router } from "react-router-dom";
 import AppContainer from './AppContainer';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import SnackbarComponent from './SnackbarComponent';
 
 const theme = createMuiTheme({
     palette: {
@@ -17,6 +18,7 @@ const App = () => {
             <Router>
                 <MenuAppBar></MenuAppBar>
                 <AppContainer></AppContainer>
+                <SnackbarComponent></SnackbarComponent>
             </Router>
         </MuiThemeProvider>
     )

@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { IStoreState } from './store';
-import { IProduct } from '../globals/interfaces';
 
 export interface IAppState {
     cart: string[]

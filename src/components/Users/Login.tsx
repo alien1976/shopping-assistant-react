@@ -1,9 +1,11 @@
 import * as React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import { useHistory, useLocation, Link } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import { Grid, Container, CssBaseline, Avatar, TextField, Button } from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import { logUserIn } from '../../redux/authenticationReducer';
+import { useDispatch } from 'react-redux';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -27,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 const Login = () => {
     const classes = useStyles();
-    const history = useHistory();
+    const dispatch = useDispatch();
     const location = useLocation();
     const [userName, setUserName] = React.useState('');
     const [userNameError, setUserNameError] = React.useState('');
@@ -36,7 +38,7 @@ const Login = () => {
 
     const { from } = location.state as { from: { pathname: string } } || { from: { pathname: "/" } };
 
-    const onUserNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const onUserNameChange = (event: any) => {
         const value = event.target.value;
 
         if (value !== undefined) {
@@ -44,7 +46,7 @@ const Login = () => {
         }
     }
 
-    const onPasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const onPasswordChange = (event: any) => {
         const value = event.target.value;
 
         if (value !== undefined) {
@@ -52,7 +54,9 @@ const Login = () => {
         }
     }
 
-    const login = () => {
+    const login = async (event: any) => {
+        event.preventDefault();
+
         if (!userName) {
             setUserNameError('User name should not be empty!')
             return;
@@ -66,9 +70,7 @@ const Login = () => {
         }
 
         setPasswordError('')
-        // fakeAuth.authenticate(() => {
-        //     history.replace(from);
-        // });
+        dispatch(logUserIn(userName, password, from.pathname))
     };
 
     return (
@@ -83,7 +85,7 @@ const Login = () => {
                 </Typography>
                 <form className={classes.form} noValidate>
                     <TextField
-                        onChange={onUserNameChange}
+                        onBlur={onUserNameChange}
                         variant="outlined"
                         margin="normal"
                         required
@@ -97,7 +99,7 @@ const Login = () => {
                         helperText={userNameError ? userNameError : ''}
                     />
                     <TextField
-                        onChange={onPasswordChange}
+                        onBlur={onPasswordChange}
                         variant="outlined"
                         margin="normal"
                         required

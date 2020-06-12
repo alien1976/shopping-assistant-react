@@ -17,6 +17,7 @@ import { addProductToCart, removeProductFromCart } from '../../redux/cartReducer
 import { useSelector, useDispatch } from 'react-redux';
 import { IStoreState } from '../../redux/store';
 import { IProduct } from '../../globals/interfaces';
+import { selectLoggedIn } from '../../redux/authenticationReducer';
 
 const useStyles = makeStyles({
     root: {
@@ -74,6 +75,7 @@ const ProductCard = ({ product }: IProductCardProps) => {
     const classes = useStyles();
     const isInCart = useSelector((state: IStoreState) => state.appState.cart.indexOf(id.toString()) !== -1);
     const dispatch = useDispatch();
+    const isUserLogged = useSelector(selectLoggedIn);
     const mediaLoaded = !!image && !!name;
 
     const productToCartToggle = () => {
@@ -111,9 +113,9 @@ const ProductCard = ({ product }: IProductCardProps) => {
                 </Typography>
                 </div>
                 <CardActions className={classes.cardActions}>
-                    <IconButton aria-label="delete" size="small" className={classes.iconButton}>
+                    {isUserLogged && <IconButton aria-label="delete" size="small" className={classes.iconButton}>
                         <StarBorderIcon />
-                    </IconButton>
+                    </IconButton>}
                     <IconButton aria-label="add-to-cart" size="small" onClick={productToCartToggle} className={classes.iconButton}>
                         {isInCart ?
                             <ShoppingCartIcon />

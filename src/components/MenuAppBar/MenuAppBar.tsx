@@ -13,10 +13,11 @@ import Menu from '@material-ui/core/Menu';
 import MenuDrawer from './MenuDrawer';
 //@ts-ignore
 import logo from '../../assets/favicon/favicon-32x32.png';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Badge } from '@material-ui/core';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { selectCartLength } from '../../redux/cartReducer';
+import { selectLoggedIn, logoutRequest } from '../../redux/authenticationReducer';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -40,10 +41,11 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-export default function MenuAppBar() {
+const MenuAppBar = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
   const productsInCart = useSelector(selectCartLength);
-  const [auth, setAuth] = React.useState(false);
+  const isUserLogged = useSelector(selectLoggedIn);
   const [isDrawerOpened, setIsDrawerOpened] = React.useState(false)
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -59,6 +61,13 @@ export default function MenuAppBar() {
   const toggleDrawer = () => {
     setIsDrawerOpened(prev => !prev)
   };
+
+  const onSignOut = () => {
+    dispatch(logoutRequest())
+    setAnchorEl(null)
+  };
+
+  const location = useLocation()
 
   return (
     <div className={classes.root}>
@@ -81,7 +90,7 @@ export default function MenuAppBar() {
               </Badge>
             </Link>
           </IconButton>
-          {auth ? (
+          {isUserLogged ? (
             <div>
               <IconButton
                 aria-label="account of current user"
@@ -109,15 +118,44 @@ export default function MenuAppBar() {
               >
                 <MenuItem onClick={handleClose}>Profile</MenuItem>
                 <MenuItem onClick={handleClose}>My account</MenuItem>
-                <MenuItem onClick={handleClose}>Sign out</MenuItem>
+                <MenuItem onClick={onSignOut}>Sign out</MenuItem>
               </Menu>
             </div>
           ) : <div>
-              <IconButton>
-                <Link to='/login'>
-                  <LockOpenIcon />
-                </Link>
+              <IconButton
+                onClick={handleMenu}
+              >
+                <LockOpenIcon />
               </IconButton>
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                open={open}
+                onClose={handleClose}
+              >
+                <MenuItem onClick={handleClose}>
+                  <Link to={{
+                    pathname: `/login`,
+                    search: '',
+                    state: { from: { pathname: '/#' + location.pathname } }
+                  }}>
+                    Login</Link>
+                </MenuItem>
+                <MenuItem onClick={handleClose}>
+                  <Link to='/sign-up'>
+                    Register
+                  </Link>
+                </MenuItem>
+              </Menu>
             </div>}
         </Toolbar>
         <MenuDrawer isOpened={isDrawerOpened} toggleDrawer={toggleDrawer}></MenuDrawer>
@@ -125,3 +163,5 @@ export default function MenuAppBar() {
     </div>
   );
 }
+
+export default MenuAppBar;
