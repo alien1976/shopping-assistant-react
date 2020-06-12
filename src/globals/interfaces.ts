@@ -30,6 +30,9 @@ export interface IShopBrand {
 
 export interface IUser {
     id?: string
+    favoriteShops?: string[]
+    favoriteProducts?: string[]
+    ownedShopsById?: string[]
     userName: string
     password: string
     email: string

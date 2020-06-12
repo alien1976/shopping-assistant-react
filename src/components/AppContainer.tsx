@@ -1,7 +1,7 @@
 import * as React from 'react';
 import PopularShops from "./Shops/PopularShops"
 import LatestProducts from './Products/LatestProducts';
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 import AllProducts from './AllProducts/AllProducts';
 import Product from './Products/Product';
 import { ProductsProvider } from '../services/products.service';
@@ -13,6 +13,10 @@ import AllShops from './AllShops/AllShops';
 import Shop from './Shops/Shop';
 import Login from './Users/Login';
 import SignUp from './Users/SignUp';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectLoggedIn } from '../redux/authenticationReducer';
+import Profile from './Users/Profile';
+import { getUserData } from '../redux/userReducer';
 
 const Home = () => {
     return (
@@ -31,6 +35,15 @@ const NotFound = () => {
 }
 
 const AppContainer = () => {
+    const isLoggedIn = useSelector(selectLoggedIn);
+    const dispatch = useDispatch();
+    if (isLoggedIn) {
+        try {
+            dispatch(getUserData(JSON.parse(localStorage.user).user.id))
+        } catch (error) {
+            console.error(error)
+        }
+    }
     return (
         <div id="container">
             <ProductsProvider>
@@ -64,6 +77,11 @@ const AppContainer = () => {
                             <Route path="/sign-up">
                                 <SignUp></SignUp>
                             </Route>
+                            <Route path='/user-profile' render={props => (
+                                !isLoggedIn ?
+                                    <Redirect to="/login" />
+                                    : <Profile />
+                            )} />
                             <Route component={NotFound} />
                         </Switch>
                     </ShopsProvider>

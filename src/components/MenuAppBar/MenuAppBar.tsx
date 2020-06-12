@@ -116,8 +116,11 @@ const MenuAppBar = () => {
                 open={open}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
-                <MenuItem onClick={handleClose}>My account</MenuItem>
+                <MenuItem onClick={handleClose}>
+                  <Link to='/user-profile'>
+                    Profile
+                  </Link>
+                </MenuItem>
                 <MenuItem onClick={onSignOut}>Sign out</MenuItem>
               </Menu>
             </div>
@@ -148,7 +151,8 @@ const MenuAppBar = () => {
                     search: '',
                     state: { from: { pathname: '/#' + location.pathname } }
                   }}>
-                    Login</Link>
+                    Login
+                  </Link>
                 </MenuItem>
                 <MenuItem onClick={handleClose}>
                   <Link to='/sign-up'>

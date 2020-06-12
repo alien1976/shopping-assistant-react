@@ -3,6 +3,7 @@ import { IStoreState } from './store';
 import { userService } from '../services/users.service';
 import { openSnackBar } from './snackBarReducer';
 import { IUser } from '../globals/interfaces';
+import { setUser } from './userReducer';
 
 export interface IUsersSate {
     cart: string[]
@@ -51,6 +52,7 @@ export const { loginRequest, loginSuccess, loginFailure, registerRequest, regist
 export const logoutRequest = () => async (dispatch: React.Dispatch<AnyAction>) => {
     localStorage.removeItem('user');
     dispatch(logout());
+    dispatch(setUser({}))
     dispatch(openSnackBar({ message: 'Successfully sign out', status: 'success' }))
 };
 
@@ -58,10 +60,11 @@ export const logUserIn = (userName: string, password: string, from?: string) => 
     dispatch(loginRequest());
 
     try {
-        const user = await userService.login(userName, password);
-        dispatch(loginSuccess(user));
-        location.replace(from ? from : '/')
+        const respData = await userService.login(userName, password);
+        dispatch(loginSuccess(respData));
+        dispatch(setUser(respData.user))
         dispatch(openSnackBar({ message: `Hello ${userName}!`, status: 'info' }));
+        location.replace(from ? from : '/')
     } catch (error) {
         dispatch(loginFailure())
         dispatch(openSnackBar({ message: error.message, status: 'error' }))

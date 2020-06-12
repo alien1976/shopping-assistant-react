@@ -1,10 +1,12 @@
 const express = require('express');
 const sendError = require('../utils').sendError;
 const replaceId = require('../utils').replaceObjectId;
+const removeProp = require('../utils').removeProp;
 const createUser = require('../utils').createUser;
 const validateUser = require('../utils').validateUser;
 const ObjectID = require('mongodb').ObjectID;
 const indicative = require('indicative');
+const bcrypt = require('bcrypt');
 
 const router = express.Router();
 
@@ -16,6 +18,7 @@ router.get('/', async (req, res) => {
 
         res.json(users.map((el) => {
             replaceId(el);
+            removeProp(el, 'password');
             return el;
         }));
     } catch (err) {
@@ -37,6 +40,9 @@ router.get('/:id', async (req, res) => {
             sendError(req, res, 404, `User with ID=${userId} does not exist`);
             return;
         }
+
+        replaceId(user)
+        removeProp(user, 'password');
 
         res.json(user);
     } catch (errors) {
@@ -65,16 +71,23 @@ router.put('/:id', async (req, res) => {
         return;
     }
 
-    if (!await validateUser(user, req, res)) return;
+    if (user.password) {
+        const salt = bcrypt.genSaltSync(10);
+        user.password = bcrypt.hashSync(user.password, salt);
+    }
 
+    if (!await validateUser(user, req, res, false)) return;
+    replaceId(user)
+    delete user._id;
     try {
         const r = await db.collection('users').updateOne({ _id: new ObjectID(userId) }, { $set: user });
 
         if (r.result.ok) {
             replaceId(user)
+            removeProp(user, 'password');
             res.json(user);
         } else {
-            sendError(req, res, 500, `Unable to update user: ${user.id}: ${user.firstName} ${user.lastName}`);
+            sendError(req, res, 500, `Unable to update user: ${user.id}: ${user.firstName} ${user.lastName}`, err);
         }
     } catch (err) {
         sendError(req, res, 500, `Unable to update user: ${user.id}: ${user.firstName} ${user.lastName}`, err);
@@ -99,7 +112,9 @@ router.delete('/:id', async (req, res) => {
         const r = await db.collection('users').deleteOne({ _id: mongoId });
 
         if (r.result.ok && r.deletedCount === 1) {
-            res.json(replaceId(oldUser));
+            removeProp(oldUser, 'password');
+            replaceId(oldUser)
+            res.json(oldUser);
         } else {
             sendError(req, res, 500, `Unable to delete user: ${oldUser.id}: ${oldUser.firstName} ${oldUser.lastName}`);
         }

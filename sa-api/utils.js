@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 
 const sendError = (req, res, statusCode, message, err) => {
     console.log(`Error: ${message}\nStatus code: ${statusCode}`);
+    console.log(err);
 
     if (req.app.get('env') === 'development') {
         res.status(statusCode || 500).json({
@@ -27,6 +28,14 @@ const replaceObjectId = (obj) => {
 }
 
 exports.replaceObjectId = replaceObjectId;
+
+const removeProp = (obj, propToRemove) => {
+    if (!obj || obj[propToRemove] === undefined) return;
+
+    delete obj[propToRemove];
+}
+
+exports.removeProp = removeProp;
 
 const createUser = async (req, res) => {
     const db = req.app.locals.db;
@@ -70,15 +79,18 @@ const createUser = async (req, res) => {
 
 exports.createUser = createUser;
 
-const validateUser = async (user, req, res) => {
+const validateUser = async (user, req, res, validatePassword = true) => {
     try {
-        await indicative.validator.validate(user, {
+        const validationConfig = {
             userName: 'required|string|min:1',
             password: 'required|string|min:4',
             firstName: 'required|string|min:1',
             lastName: 'required|string|min:1',
             email: 'required|email',
-        })
+        }
+        if (!validatePassword) delete validationConfig.password;
+
+        await indicative.validator.validate(user, validationConfig)
 
         return true;
     } catch (error) {

@@ -25,7 +25,6 @@ export const snackBarSlice = createSlice({
 //actions
 export const { openSnackBar, closeSnackBar } = snackBarSlice.actions;
 
-console.log(closeSnackBar)
 //selectors
 export const selectSnackState = (state: IStoreState) => state.snackBarState.opened;
 export const selectSnackStatus = (state: IStoreState) => state.snackBarState.status;
