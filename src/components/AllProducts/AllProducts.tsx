@@ -1,11 +1,12 @@
 import * as React from 'react';
 import { useProducts } from '../../services/products.service';
-import { IProduct, IShopBrand } from '../../globals/interfaces';
+import { IProduct } from '../../globals/interfaces';
 import ProductCard from '../Products/ProductCard';
 import SearchIcon from '@material-ui/icons/Search';
 import { InputLabel, TextField, Select, MenuItem, FormControl } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import { useShopBrands } from '../../services/shopBrands.service';
+import { useSelector } from 'react-redux';
+import { selectShopBrands } from '../../redux/shopBrandsReducer';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -23,21 +24,16 @@ const AllProducts = () => {
     const classes = useStyles();
     const searchBarRef = React.useRef(null);
     const products = useProducts();
-    const shops = useShopBrands();
     const [searchByValue, setSearchByValue] = React.useState('newest');
     const [currentShopBrand, setCurrentShopBrand] = React.useState('all');
     const [allProducts, setAllProducts] = React.useState([]);
-    const [allShopsBrands, setAllShopBrands] = React.useState([]);
+    const shopBrands = useSelector(selectShopBrands);
     const [filteredProducts, setFilteredProducts] = React.useState([]);
 
     React.useEffect(() => {
         products.getAllProducts().then((products: IProduct[]) => {
             setAllProducts(products)
             setFilteredProducts(products)
-        })
-
-        shops.getAllShopBrands().then((shopBrands: IShopBrand[]) => {
-            setAllShopBrands(shopBrands)
         })
     }, [])
 
@@ -50,7 +46,7 @@ const AllProducts = () => {
     }
 
     const filterProducts = () => {
-        const shopBrandProducts = currentShopBrand === 'all' ? 'all' : allShopsBrands.find((el) => el.id === currentShopBrand).productsIds;
+        const shopBrandProducts = currentShopBrand === 'all' ? 'all' : shopBrands.find((el) => el.id === currentShopBrand).productsIds;
 
         const newProducts = allProducts.filter((el) => {
             return el.name.toLowerCase().indexOf(searchBarRef.current.value.toLowerCase()) !== -1 &&
@@ -122,7 +118,7 @@ const AllProducts = () => {
                         label="Shop"
                     >
                         <MenuItem value={'all'}>All</MenuItem>
-                        {allShopsBrands.map((el) => {
+                        {shopBrands.map((el) => {
                             return <MenuItem key={el.id} value={el.id}>{el.name}</MenuItem>
                         })}
                     </Select>

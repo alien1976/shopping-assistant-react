@@ -1,5 +1,4 @@
-// import * as React from 'react';
-import { authHeader } from "../utils/utils";
+import { authHeader, handleResponse } from "../utils/utils";
 import { IUser } from '../globals/interfaces';
 import { SA_API_BASE } from "../globals/constants";
 
@@ -27,7 +26,7 @@ const getAllUsers = async () => {
     };
 
     const response = fetch(`${SA_API_BASE}/users`, requestOptions);
-    return await handleResponse(response);
+    return await handleResponse(response, logout);
 }
 
 const getUserById = async (id: string) => {
@@ -37,7 +36,7 @@ const getUserById = async (id: string) => {
     };
 
     const response = fetch(`${SA_API_BASE}/users/${id}`, requestOptions)
-    return await handleResponse(response);
+    return await handleResponse(response, logout);
 }
 
 const registerUser = async (user: IUser) => {
@@ -48,7 +47,7 @@ const registerUser = async (user: IUser) => {
     };
 
     const response = fetch(`${SA_API_BASE}/auth/register`, requestOptions)
-    return await handleResponse(response);
+    return await handleResponse(response, logout);
 }
 
 const updateUser = async (user: IUser) => {
@@ -59,7 +58,7 @@ const updateUser = async (user: IUser) => {
     };
 
     const response = fetch(`${SA_API_BASE}/users/${user.id}`, requestOptions)
-    return await handleResponse(response);
+    return await handleResponse(response, logout);
 }
 
 const deleteUser = async (userId: string) => {
@@ -69,24 +68,7 @@ const deleteUser = async (userId: string) => {
     };
 
     const response = fetch(`${SA_API_BASE}/users/${userId}`, requestOptions)
-    return await handleResponse(response);
-}
-
-const handleResponse = async (response: any) => {
-    const res = await response;
-    const text = await res.text()
-
-    const data = text && JSON.parse(text);
-    if (!res.ok) {
-        if (res.status === 401) {
-            logout();
-        }
-
-        const error = (data && data.message) || res.statusText;
-        throw new Error(error);
-    }
-
-    return data;
+    return await handleResponse(response, logout);
 }
 
 export const userService = {

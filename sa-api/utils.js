@@ -100,3 +100,23 @@ const validateUser = async (user, req, res, validatePassword = true) => {
 }
 
 exports.validateUser = validateUser;
+
+const validateShopBrand = async (user, req, res) => {
+    try {
+        const validationConfig = {
+            name: 'required|string|min:1',
+            shopsIds: 'array',
+            productsIds: 'array',
+            image: 'required|string|min:1',
+        }
+
+        await indicative.validator.validate(user, validationConfig)
+
+        return true;
+    } catch (error) {
+        sendError(req, res, 400, `Invalid shop brand data: ${error.map(e => e.message).join(', ')}`, error);
+        return false;
+    }
+}
+
+exports.validateShopBrand = validateShopBrand;

@@ -8,8 +8,9 @@ import { IProduct, IShop, IShopBrand } from '../../globals/interfaces';
 import { useProducts } from '../../services/products.service';
 import ItemLoader from '../Loaders/ItemLoader';
 import { useShops } from '../../services/shops.service';
-import { useShopBrands } from '../../services/shopBrands.service';
 import ShopProducts from './ShopProducts';
+import { selectShopBrands } from '../../redux/shopBrandsReducer';
+import { useSelector } from 'react-redux';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -39,7 +40,7 @@ const Shop = () => {
     const classes = useStyles();
     const products = useProducts();
     const shops = useShops();
-    const shopBrands = useShopBrands();
+    const shopBrands = useSelector(selectShopBrands);
     let { id } = useParams();
     const shopId = parseInt(id)
     const [shop, setShop] = React.useState(null);
@@ -49,14 +50,12 @@ const Shop = () => {
     React.useEffect(() => {
         shops.getShop(shopId).then((shop: IShop) => {
             setShop(shop);
-            return shopBrands.getShopBrand(shop.shopBrandId);
-        }).then((shopBrand: IShopBrand) => {
-            setShopBrand(shopBrand);
+            setShopBrand(shopBrands.find((el) => el.id === shop.shopBrandId));
             return products.getAllProductsByShopId(shopId)
         }).then((products: IProduct[]) => {
             setShopProducts(products);
         })
-    }, [])
+    }, [shopBrands])
 
     const mediaLoaded = !!shop && !!shopProducts && !!shopBrand;
 
