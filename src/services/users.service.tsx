@@ -80,7 +80,6 @@ const handleResponse = async (response: any) => {
     if (!res.ok) {
         if (res.status === 401) {
             logout();
-            location.reload(true);
         }
 
         const error = (data && data.message) || res.statusText;

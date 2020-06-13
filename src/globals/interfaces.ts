@@ -34,7 +34,7 @@ export interface IUser {
     favoriteProducts?: string[]
     ownedShopsById?: string[]
     userName: string
-    password: string
+    password?: string
     email: string
     firstName: string
     lastName: string

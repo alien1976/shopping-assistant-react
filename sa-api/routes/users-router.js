@@ -77,8 +77,28 @@ router.put('/:id', async (req, res) => {
     }
 
     if (!await validateUser(user, req, res, false)) return;
+
+    //The user name is updated then check for the new name existence
+    if (oldUser.userName !== user.userName) {
+        const isUserNameExists = await db.collection('users').findOne({ userName: user.userName });
+        if (isUserNameExists) {
+            sendError(req, res, 400, `User name: ${user.userName} already exists`)
+            return;
+        }
+    }
+
+    //The user email is updated then check for the new email existence
+    if (oldUser.email !== user.email) {
+        const isEmailExists = await db.collection('users').findOne({ email: user.email })
+        if (isEmailExists) {
+            sendError(req, res, 400, `User with email: ${user.email} has been already registered`)
+            return;
+        }
+    }
+
     replaceId(user)
     delete user._id;
+
     try {
         const r = await db.collection('users').updateOne({ _id: new ObjectID(userId) }, { $set: user });
 

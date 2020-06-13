@@ -61,10 +61,10 @@ export const logUserIn = (userName: string, password: string, from?: string) => 
 
     try {
         const respData = await userService.login(userName, password);
+        location.replace(from ? from : '/')
         dispatch(loginSuccess(respData));
         dispatch(setUser(respData.user))
         dispatch(openSnackBar({ message: `Hello ${userName}!`, status: 'info' }));
-        location.replace(from ? from : '/')
     } catch (error) {
         dispatch(loginFailure())
         dispatch(openSnackBar({ message: error.message, status: 'error' }))

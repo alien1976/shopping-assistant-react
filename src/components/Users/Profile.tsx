@@ -10,7 +10,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { IUser } from '../../globals/interfaces';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectUser, updateUserData } from '../../redux/userReducer';
+import { selectUser, updateUserData, deleteUser } from '../../redux/userReducer';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -28,8 +28,10 @@ const useStyles = makeStyles((theme) => ({
         marginTop: theme.spacing(3),
     },
     submit: {
-        margin: theme.spacing(3, 0, 2),
         backgroundColor: '#5b5b5b'
+    },
+    delete: {
+        backgroundColor: 'red'
     },
     formControl: {
         width: '100%'
@@ -57,6 +59,13 @@ const Profile = () => {
         event.preventDefault();
         if (firstName && lastName && userName && email) {
             dispatch(updateUserData({ ...user, firstName, lastName, userName, password: password ? password : user.password, email } as IUser));
+        }
+    }
+
+    const onDelete = (event: any) => {
+        event.preventDefault();
+        if (confirm('Are you sure you want to delete your profile? This action cannot be undone and your accout will be permanently deleted!')) {
+            dispatch(deleteUser(user.id))
         }
     }
 
@@ -131,17 +140,31 @@ const Profile = () => {
                                 onChange={(event) => setEmail(event.target.value)}
                             />
                         </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <Button
+                                type="button"
+                                fullWidth
+                                variant="contained"
+                                color="primary"
+                                className={classes.submit}
+                                onClick={onSubmit}
+                            >
+                                Save
+                            </Button>
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <Button
+                                type="button"
+                                fullWidth
+                                variant="contained"
+                                color="primary"
+                                className={classes.delete}
+                                onClick={onDelete}
+                            >
+                                Delete account
+                            </Button>
+                        </Grid>
                     </Grid>
-                    <Button
-                        type="button"
-                        fullWidth
-                        variant="contained"
-                        color="primary"
-                        className={classes.submit}
-                        onClick={onSubmit}
-                    >
-                        Save
-                    </Button>
                 </form>
             </div>
         </Container >

@@ -16,7 +16,11 @@ import SignUp from './Users/SignUp';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectLoggedIn } from '../redux/authenticationReducer';
 import Profile from './Users/Profile';
-import { getUserData } from '../redux/userReducer';
+import { getUserData, selectUserRole } from '../redux/userReducer';
+import { USER_ROLES } from '../globals/constants';
+import { openSnackBar } from '../redux/snackBarReducer';
+import UsersManager from './Users/UsersManager';
+import ErrorBoundary from './ErrorBoundary';
 
 const Home = () => {
     return (
@@ -36,6 +40,7 @@ const NotFound = () => {
 
 const AppContainer = () => {
     const isLoggedIn = useSelector(selectLoggedIn);
+    const userRole = useSelector(selectUserRole);
     const dispatch = useDispatch();
     if (isLoggedIn) {
         try {
@@ -46,47 +51,59 @@ const AppContainer = () => {
     }
     return (
         <div id="container">
-            <ProductsProvider>
-                <ShopBrandsProvider>
-                    <ShopsProvider>
-                        <Switch>
-                            <Route exact path="/">
-                                <Home></Home>
-                            </Route>
-                            <Route path="/products/:id">
-                                <Product></Product>
-                            </Route>
-                            <Route path="/products">
-                                <AllProducts></AllProducts>
-                            </Route>
-                            <Route path="/shops/:id">
-                                <Shop></Shop>
-                            </Route>
-                            <Route path="/shops">
-                                <AllShops></AllShops>
-                            </Route>
-                            <Route path="/shopping-cart/:id">
-                                <ShoppingNavigation></ShoppingNavigation>
-                            </Route>
-                            <Route path="/shopping-cart">
-                                <ShoppingCart></ShoppingCart>
-                            </Route>
-                            <Route path="/login">
-                                <Login></Login>
-                            </Route>
-                            <Route path="/sign-up">
-                                <SignUp></SignUp>
-                            </Route>
-                            <Route path='/user-profile' render={props => (
-                                !isLoggedIn ?
-                                    <Redirect to="/login" />
-                                    : <Profile />
-                            )} />
-                            <Route component={NotFound} />
-                        </Switch>
-                    </ShopsProvider>
-                </ShopBrandsProvider>
-            </ProductsProvider>
+            <ErrorBoundary>
+                <ProductsProvider>
+                    <ShopBrandsProvider>
+                        <ShopsProvider>
+                            <Switch>
+                                <Route exact path="/">
+                                    <Home></Home>
+                                </Route>
+                                <Route path="/products/:id">
+                                    <Product></Product>
+                                </Route>
+                                <Route path="/products">
+                                    <AllProducts></AllProducts>
+                                </Route>
+                                <Route path="/shops/:id">
+                                    <Shop></Shop>
+                                </Route>
+                                <Route path="/shops">
+                                    <AllShops></AllShops>
+                                </Route>
+                                <Route path="/shopping-cart/:id">
+                                    <ShoppingNavigation></ShoppingNavigation>
+                                </Route>
+                                <Route path="/shopping-cart">
+                                    <ShoppingCart></ShoppingCart>
+                                </Route>
+                                <Route path="/login">
+                                    <Login></Login>
+                                </Route>
+                                <Route path="/sign-up">
+                                    <SignUp></SignUp>
+                                </Route>
+                                <Route path='/user-profile' render={props => (
+                                    !isLoggedIn ?
+                                        <Redirect to="/login" />
+                                        : <Profile />
+                                )} />
+                                <Route path='/users-manager' render={() => {
+                                    if (!isLoggedIn) return <Redirect to="/login" />
+                                    if (userRole !== USER_ROLES['Admin']) {
+                                        location.replace('/')
+                                        dispatch(openSnackBar({ message: 'You don\'t have rights to access this page!', status: 'warning' }));
+                                        return;
+                                    }
+
+                                    return <UsersManager />
+                                }} />
+                                <Route component={NotFound} />
+                            </Switch>
+                        </ShopsProvider>
+                    </ShopBrandsProvider>
+                </ProductsProvider>
+            </ErrorBoundary>
         </div>
     )
 }

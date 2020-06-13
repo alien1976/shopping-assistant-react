@@ -3,12 +3,14 @@ import { IStoreState } from './store';
 import { userService } from '../services/users.service';
 import { openSnackBar } from './snackBarReducer';
 import { IUser } from '../globals/interfaces';
+import { logout } from './authenticationReducer';
 
 //reducers
 export const userSlice = createSlice({
     name: 'user',
     initialState: {
         updatingUser: false,
+        deletingUser: false,
         gettingUserData: false,
         user: {} as IUser
     },
@@ -21,12 +23,15 @@ export const userSlice = createSlice({
         },
         setGettingUserData: (state, action) => {
             state.gettingUserData = action.payload === undefined ? false : action.payload;
+        },
+        setDeletingUser: (state, action) => {
+            state.deletingUser = action.payload === undefined ? false : action.payload;
         }
     }
 });
 
 //actions
-export const { setUser, setUpdatingUser, setGettingUserData } = userSlice.actions;
+export const { setUser, setUpdatingUser, setGettingUserData, setDeletingUser } = userSlice.actions;
 
 export const getUserData = (userId: string) => async (dispatch: React.Dispatch<AnyAction>) => {
     dispatch(setGettingUserData(true));
@@ -54,8 +59,25 @@ export const updateUserData = (user: IUser) => async (dispatch: React.Dispatch<A
     }
 };
 
+export const deleteUser = (userId: string) => async (dispatch: React.Dispatch<AnyAction>) => {
+    dispatch(setDeletingUser(true));
+
+    try {
+        await userService.deleteUser(userId);
+        dispatch(setDeletingUser(false));
+        localStorage.removeItem('user');
+        dispatch(logout());
+        dispatch(setUser({}))
+        dispatch(openSnackBar({ message: `Successfully deleted user account!`, status: 'success' }));
+    } catch (error) {
+        dispatch(setDeletingUser(false));
+        dispatch(openSnackBar({ message: error.message, status: 'error' }))
+    }
+};
+
 //selectors
 export const selectUser = (state: IStoreState) => state.userState.user;
+export const selectUserRole = (state: IStoreState) => state.userState.user && state.userState.user.role;
 export const selectUpdatingUser = (state: IStoreState) => state.userState.updatingUser;
 
 export default userSlice.reducer;

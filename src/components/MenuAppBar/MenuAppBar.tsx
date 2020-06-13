@@ -18,6 +18,7 @@ import { Badge } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectCartLength } from '../../redux/cartReducer';
 import { selectLoggedIn, logoutRequest } from '../../redux/authenticationReducer';
+import { selectUserRole } from '../../redux/userReducer';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -49,6 +50,7 @@ const MenuAppBar = () => {
   const [isDrawerOpened, setIsDrawerOpened] = React.useState(false)
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const userRole = useSelector(selectUserRole)
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -121,6 +123,13 @@ const MenuAppBar = () => {
                     Profile
                   </Link>
                 </MenuItem>
+                {userRole === 'Admin' ?
+                  <MenuItem onClick={handleClose}>
+                    <Link to='/users-manager'>
+                      Users manager
+                  </Link>
+                  </MenuItem>
+                  : null}
                 <MenuItem onClick={onSignOut}>Sign out</MenuItem>
               </Menu>
             </div>
