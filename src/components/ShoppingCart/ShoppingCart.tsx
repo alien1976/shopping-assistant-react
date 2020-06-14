@@ -1,31 +1,28 @@
 import * as React from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { Badge } from '@material-ui/core';
-import { IProduct } from '../../globals/interfaces';
-import { useProducts } from '../../services/products.service';
 import ItemLoader from '../Loaders/ItemLoader';
 import ShopCard from '../Shops/ShopCard';
 import { useSelector } from 'react-redux';
 import { selectCart } from '../../redux/cartReducer';
 import { selectShops } from '../../redux/shopsReducer';
+import { selectProducts } from '../../redux/productsReducer';
 
 const ShoppingChart = () => {
     const history = useHistory();
     const allShops = useSelector(selectShops);
-    const products = useProducts();
+    const products = useSelector(selectProducts);
     const productsInCartIds = useSelector(selectCart);
     const [shops, setShops] = React.useState([]);
     const [allProducts, setAllProducts] = React.useState([]);
 
     React.useEffect(() => {
-        let productsTemp: IProduct[] = [];
+        if (!products || !products.length || !allShops || !allShops.length || !productsInCartIds || !productsInCartIds.length) return;
 
-        products.getAllProducts().then((allProducts: IProduct[]) => {
-            productsTemp = allProducts.filter((el) => productsInCartIds.indexOf(el.id.toString()) !== -1);
-            setAllProducts(productsTemp.map((el) => { return { ...el, bought: false } }));
-            setShops(allShops.filter((el) => productsTemp.findIndex((product) => product.shopId === el.id) !== -1))
-        })
-    }, [productsInCartIds])
+        const productsTemp = products.filter((el) => productsInCartIds.indexOf(el.id.toString()) !== -1);
+        setAllProducts(productsTemp.map((el) => { return { ...el, bought: false } }));
+        setShops(allShops.filter((el) => productsTemp.findIndex((product) => product.shopId === el.id) !== -1))
+    }, [productsInCartIds, products, allShops])
 
     const getShopBrandProductsCount = React.useCallback((shopBrandId: number) => {
         let count = 0;

@@ -4,7 +4,6 @@ import LatestProducts from './Products/LatestProducts';
 import { Switch, Route, Redirect } from "react-router-dom";
 import AllProducts from './AllProducts/AllProducts';
 import Product from './Products/Product';
-import { ProductsProvider } from '../services/products.service';
 import ShoppingCart from './ShoppingCart/ShoppingCart';
 import ShoppingNavigation from './ShoppingCart/ShoppingNavigation';
 import AllShops from './AllShops/AllShops';
@@ -23,6 +22,8 @@ import ShopBrandsManager from './Shops/ShopBrandsManager';
 import ShopsManager from './Shops/ShopsManager';
 import { getAllShopBrands } from '../redux/shopBrandsReducer';
 import { getAllShops } from '../redux/shopsReducer';
+import ProductsManager from './Products/ProductsManager';
+import { getAllProducts } from '../redux/productsReducer';
 
 const Home = () => {
     return (
@@ -48,6 +49,8 @@ const AppContainer = () => {
     React.useEffect(() => {
         dispatch(getAllShopBrands());
         dispatch(getAllShops());
+        dispatch(getAllProducts());
+
         if (isLoggedIn) {
             try {
                 dispatch(getUserData(JSON.parse(localStorage.user).user.id))
@@ -60,78 +63,89 @@ const AppContainer = () => {
     return (
         <div id="container">
             <ErrorBoundary>
-                <ProductsProvider>
-                    <Switch>
-                        <Route exact path="/">
-                            <Home></Home>
-                        </Route>
-                        <Route path="/products/:id">
-                            <Product></Product>
-                        </Route>
-                        <Route path="/products">
-                            <AllProducts></AllProducts>
-                        </Route>
-                        <Route path="/shops/:id">
-                            <Shop></Shop>
-                        </Route>
-                        <Route path="/shops">
-                            <AllShops></AllShops>
-                        </Route>
-                        <Route path="/shopping-cart/:id">
-                            <ShoppingNavigation></ShoppingNavigation>
-                        </Route>
-                        <Route path="/shopping-cart">
-                            <ShoppingCart></ShoppingCart>
-                        </Route>
-                        <Route path="/login">
-                            <Login></Login>
-                        </Route>
-                        <Route path="/sign-up">
-                            <SignUp></SignUp>
-                        </Route>
-                        <Route path='/user-profile' render={props => (
-                            !isLoggedIn ?
-                                <Redirect to="/login" />
-                                : <Profile />
-                        )} />
-                        <Route path='/users-manager' render={() => {
-                            if (!isLoggedIn) return <Redirect to="/login" />
-                            if (userRole !== USER_ROLES['Admin']) {
+                <Switch>
+                    <Route exact path="/">
+                        <Home></Home>
+                    </Route>
+                    <Route path="/products/:id">
+                        <Product></Product>
+                    </Route>
+                    <Route path="/products">
+                        <AllProducts></AllProducts>
+                    </Route>
+                    <Route path="/shops/:id">
+                        <Shop></Shop>
+                    </Route>
+                    <Route path="/shops">
+                        <AllShops></AllShops>
+                    </Route>
+                    <Route path="/shopping-cart/:id">
+                        <ShoppingNavigation></ShoppingNavigation>
+                    </Route>
+                    <Route path="/shopping-cart">
+                        <ShoppingCart></ShoppingCart>
+                    </Route>
+                    <Route path="/login">
+                        <Login></Login>
+                    </Route>
+                    <Route path="/sign-up">
+                        <SignUp></SignUp>
+                    </Route>
+                    <Route path='/user-profile' render={props => (
+                        !isLoggedIn ?
+                            <Redirect to="/login" />
+                            : <Profile />
+                    )} />
+                    <Route path='/users-manager' render={() => {
+                        if (!isLoggedIn) return <Redirect to="/login" />
+                        if (userRole !== USER_ROLES['Admin']) {
+                            location.replace('/')
+                            dispatch(openSnackBar({ message: 'You don\'t have rights to access this page!', status: 'warning' }));
+                            return;
+                        }
+
+                        return <UsersManager />
+                    }} />
+                    <Route path='/shop-brands-manager' render={() => {
+                        if (!isLoggedIn) return <Redirect to="/login" />
+                        switch (userRole) {
+                            case USER_ROLES['Admin']:
+                            case USER_ROLES['Shop Owner']: return <ShopBrandsManager />
+                            default: {
                                 location.replace('/')
                                 dispatch(openSnackBar({ message: 'You don\'t have rights to access this page!', status: 'warning' }));
                                 return;
                             }
-
-                            return <UsersManager />
-                        }} />
-                        <Route path='/shop-brands-manager' render={() => {
-                            if (!isLoggedIn) return <Redirect to="/login" />
-                            switch (userRole) {
-                                case USER_ROLES['Admin']:
-                                case USER_ROLES['Shop Owner']: return <ShopBrandsManager />
-                                default: {
-                                    location.replace('/')
-                                    dispatch(openSnackBar({ message: 'You don\'t have rights to access this page!', status: 'warning' }));
-                                    return;
-                                }
+                        }
+                    }} />
+                    <Route path='/shops-manager' render={() => {
+                        if (!isLoggedIn) return <Redirect to="/login" />
+                        switch (userRole) {
+                            case USER_ROLES['Admin']:
+                            case USER_ROLES['Shop Manager']:
+                            case USER_ROLES['Shop Owner']: return <ShopsManager />
+                            default: {
+                                location.replace('/')
+                                dispatch(openSnackBar({ message: 'You don\'t have rights to access this page!', status: 'warning' }));
+                                return;
                             }
-                        }} />
-                        <Route path='/shops-manager' render={() => {
-                            if (!isLoggedIn) return <Redirect to="/login" />
-                            switch (userRole) {
-                                case USER_ROLES['Admin']:
-                                case USER_ROLES['Shop Manager']:
-                                case USER_ROLES['Shop Owner']: return <ShopsManager />
-                                default: {
-                                    location.replace('/')
-                                    dispatch(openSnackBar({ message: 'You don\'t have rights to access this page!', status: 'warning' }));
-                                    return;
-                                }
+                        }
+                    }} />
+                    <Route path='/products-manager' render={() => {
+                        if (!isLoggedIn) return <Redirect to="/login" />
+                        switch (userRole) {
+                            case USER_ROLES['Admin']:
+                            case USER_ROLES['Shop Manager']:
+                            case USER_ROLES['Shop Owner']: return <ProductsManager />
+                            default: {
+                                location.replace('/')
+                                dispatch(openSnackBar({ message: 'You don\'t have rights to access this page!', status: 'warning' }));
+                                return;
                             }
-                        }} />
-                        <Route component={NotFound} />
-                    </Switch>
-                </ProductsProvider>
+                        }
+                    }} />
+                    <Route component={NotFound} />
+                </Switch>
             </ErrorBoundary>
         </div>
     )

@@ -151,7 +151,7 @@ const ShoppingNavigation = () => {
 
     const toggleProduct = (event: React.MouseEvent<HTMLLIElement>) => {
         if (findingPath.current) return;
-        const productId = parseInt(event.currentTarget.dataset.id);
+        const productId = event.currentTarget.dataset.id;
         const productIsAvailable = event.currentTarget.dataset.isavailable === 'true';
         const product = productIsAvailable ?
             availableProducts.find((el) => el.id === productId) :

@@ -101,7 +101,7 @@ const validateUser = async (user, req, res, validatePassword = true) => {
 
 exports.validateUser = validateUser;
 
-const validateShopBrand = async (user, req, res) => {
+const validateShopBrand = async (shopBrand, req, res) => {
     try {
         const validationConfig = {
             name: 'required|string|min:1',
@@ -110,7 +110,7 @@ const validateShopBrand = async (user, req, res) => {
             image: 'required|string|min:1',
         }
 
-        await indicative.validator.validate(user, validationConfig)
+        await indicative.validator.validate(shopBrand, validationConfig)
 
         return true;
     } catch (error) {
@@ -121,19 +121,18 @@ const validateShopBrand = async (user, req, res) => {
 
 exports.validateShopBrand = validateShopBrand;
 
-const validateShop = async (user, req, res) => {
+const validateShop = async (shop, req, res) => {
     try {
         const validationConfig = {
             name: 'required|string|min:1',
             shopBrandId: 'required|string|min:1',
             address: 'required|string|min:1',
-            shopGoogleMapsSrc: 'string|min:1',
             map: 'object',
             mapEntryPoint: 'string',
             mapImage: 'string',
         }
 
-        await indicative.validator.validate(user, validationConfig)
+        await indicative.validator.validate(shop, validationConfig)
 
         return true;
     } catch (error) {
@@ -143,3 +142,25 @@ const validateShop = async (user, req, res) => {
 }
 
 exports.validateShop = validateShop;
+
+const validateProduct = async (product, req, res) => {
+    try {
+        console.log(product.price, typeof product.price)
+        const validationConfig = {
+            name: 'required|string|min:1',
+            shopBrandId: 'required|string|min:1',
+            shopId: 'required|string|min:1',
+            price: 'required|string|min:1',
+            image: 'required|string|min:1'
+        }
+
+        await indicative.validator.validate(product, validationConfig)
+
+        return true;
+    } catch (error) {
+        sendError(req, res, 400, `Invalid product data: ${error.map(e => e.message).join(', ')}`, error);
+        return false;
+    }
+}
+
+exports.validateProduct = validateProduct;

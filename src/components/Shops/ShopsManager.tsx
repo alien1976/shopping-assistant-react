@@ -32,7 +32,6 @@ const ShopsManager = () => {
             { title: 'Shop name', field: 'name' },
             { title: 'Shop address', field: 'address' },
             { title: 'Shop brand', field: 'shopBrandId', lookup: shopBrandsOptions },
-            { title: 'Google maps src', field: 'shopGoogleMapsSrc' },
             // { title: 'Мap', field: 'address' },
             // { title: 'Map image', field: 'mapImage' },
         ],

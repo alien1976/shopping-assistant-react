@@ -5,6 +5,7 @@ import snackBarReducer from './snackBarReducer';
 import userReducer from './userReducer';
 import shopBrandsReducer from './shopBrandsReducer';
 import shopsReducer from './shopsReducer';
+import productsReducer from './productsReducer';
 
 const rootReducer = combineReducers({
     appState: appReducer,
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
     userState: userReducer,
     shopBrandsState: shopBrandsReducer,
     shopsState: shopsReducer,
+    productsState: productsReducer,
 });
 
 const store = configureStore({

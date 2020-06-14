@@ -4,10 +4,11 @@ import Typography from '@material-ui/core/Typography';
 import CardLoader from '../Loaders/CardLoader';
 import { useParams } from 'react-router-dom';
 import { Paper, Grid } from '@material-ui/core';
-import { IProduct, IShop, IShopBrand } from '../../globals/interfaces';
-import { useProducts } from '../../services/products.service';
 import ItemLoader from '../Loaders/ItemLoader';
 import ProductLocationMap from '../Map/ProductLocationMap';
+import { useSelector } from 'react-redux';
+import { selectProducts } from '../../redux/productsReducer';
+import { selectShops } from '../../redux/shopsReducer';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -38,26 +39,32 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const Product = () => {
     const classes = useStyles();
-    const products = useProducts();
     let { id } = useParams();
-    const productId = parseInt(id)
+    const products = useSelector(selectProducts);
     const [product, setProduct] = React.useState(null);
-    const [productShop, setProductShop] = React.useState(null);
-    const [productShopBrand, setProductShopBrand] = React.useState(null);
 
     React.useEffect(() => {
-        products.getProduct(productId).then((product: IProduct) => {
-            setProduct(product);
-            return products.getProductShopBrand(productId);
-        }).then((shopBrand: IShopBrand) => {
-            setProductShopBrand(shopBrand);
-            return products.getProductShop(productId)
-        }).then((shop: IShop) => {
-            setProductShop(shop);
-        })
-    }, [])
+        if (!products || !products.length) return;
 
-    const mediaLoaded = !!product && !!productShop && !!productShopBrand;
+        const product = products.find((el) => el.id === id);
+        if (!product) return;
+        setProduct(product);
+    }, [products])
+
+    const shops = useSelector(selectShops);
+    const [productShop, setProductShop] = React.useState(null);
+
+    React.useEffect(() => {
+        if (!shops || !shops.length || !product) return;
+
+        const productShop = shops.find((el) => el.id === product.shopId)
+
+        if (!productShop) return;
+
+        setProductShop(productShop);
+    }, [shops, product])
+
+    const mediaLoaded = !!product && !!productShop;
 
     return (
         <div className={classes.root}>
@@ -86,7 +93,7 @@ const Product = () => {
                                         Shop location:
                                     </Typography>
                                     <Typography variant="body2" gutterBottom>
-                                        {productShopBrand.name}
+                                        {productShop.name}
                                     </Typography>
                                     <Typography variant="body2" gutterBottom>
                                         {productShop.address}

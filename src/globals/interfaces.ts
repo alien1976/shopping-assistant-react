@@ -1,17 +1,17 @@
 export interface IProduct {
-    id: number
+    id: string
     name: string
     price: number
     image: string
     description?: string
-    coordinates: string
-    shopBrandId: number
-    shopId: number
+    coordinates?: string
+    shopBrandId: string
+    shopId: string
 }
 
 export interface IShop {
-    id: number;
-    shopBrandId: number;
+    id: string;
+    shopBrandId: string;
     name: string;
     address: string;
     map: {};
@@ -23,10 +23,10 @@ export interface IShop {
 export interface IShopBrand {
     id: string;
     name: string;
-    shopsIds: number[];
-    productsIds: number[];
+    shopsIds: string[];
+    productsIds: string[];
     image: any;
-    [key: string]: string | number[] | any
+    [key: string]: string | string[] | any
 }
 
 export interface IUser {

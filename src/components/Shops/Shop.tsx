@@ -4,13 +4,12 @@ import Typography from '@material-ui/core/Typography';
 import CardLoader from '../Loaders/CardLoader';
 import { useParams } from 'react-router-dom';
 import { Paper, Grid } from '@material-ui/core';
-import { IProduct } from '../../globals/interfaces';
-import { useProducts } from '../../services/products.service';
 import ItemLoader from '../Loaders/ItemLoader';
 import ShopProducts from './ShopProducts';
 import { selectShops } from '../../redux/shopsReducer';
 import { useSelector } from 'react-redux';
 import { selectShopBrands } from '../../redux/shopBrandsReducer';
+import { selectProducts } from '../../redux/productsReducer';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -38,13 +37,12 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const Shop = () => {
     const classes = useStyles();
-    const products = useProducts();
+    const products = useSelector(selectProducts);
     const shops = useSelector(selectShops);
     const shopBrands = useSelector(selectShopBrands);
     let { id } = useParams();
-    const shopId = parseInt(id)
     const [shop, setShop] = React.useState(null);
-    const [shopProducts, setShopProducts] = React.useState(null);
+    const [shopProducts, setShopProducts] = React.useState([]);
     const [shopBrand, setShopBrand] = React.useState(null);
 
     React.useEffect(() => {
@@ -59,9 +57,9 @@ const Shop = () => {
         setShop(shop);
         setShopBrand(shopBrand);
 
-        products.getAllProductsByShopId(shopId).then((products: IProduct[]) => {
-            setShopProducts(products);
-        })
+        if (!products || !products.length) return;
+
+        setShopProducts(products.filter((el) => el.shopId === shop.id));
     }, [shopBrands, shops])
 
     const mediaLoaded = !!shop && !!shopProducts && !!shopBrand;
@@ -99,7 +97,7 @@ const Shop = () => {
                                         <Grid item>
                                             <div className="mapouter">
                                                 <div className="gmap_canvas">
-                                                    <iframe width="100%" height="550" id="gmap_canvas" src={shop.shopGoogleMapsSrc} frameBorder="0" scrolling="yes" marginHeight={0} marginWidth={0}></iframe>
+                                                    <iframe width="100%" height="550" id="gmap_canvas" src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBIjeI8ljOzaI9ci2wWBgti-Xgbk6YZfqQ&q=${shop.address.replace(/\s/g, '+')}`} frameBorder="0" scrolling="yes" marginHeight={0} marginWidth={0}></iframe>
                                                 </div>
                                             </div>
                                         </Grid>

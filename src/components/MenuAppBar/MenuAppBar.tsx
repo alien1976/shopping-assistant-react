@@ -118,51 +118,66 @@ const MenuAppBar = () => {
                 open={open}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleClose}>
-                  <Link to='/user-profile'>
+                <Link to='/user-profile'>
+                  <MenuItem onClick={handleClose}>
                     Profile
-                  </Link>
-                </MenuItem>
+                  </MenuItem>
+                </Link>
                 {userRole === 'Admin' ?
                   <div>
-                    <MenuItem onClick={handleClose}>
-                      <Link to='/users-manager'>
+                    <Link to='/users-manager'>
+                      <MenuItem onClick={handleClose}>
                         Users manager
-                      </Link>
-                    </MenuItem>
-                    <MenuItem onClick={handleClose}>
-                      <Link to='/shop-brands-manager'>
+                      </MenuItem>
+                    </Link>
+                    <Link to='/shop-brands-manager'>
+                      <MenuItem onClick={handleClose}>
                         Shop brands manager
-                      </Link>
-                    </MenuItem>
-                    <MenuItem onClick={handleClose}>
-                      <Link to='/shops-manager'>
+                      </MenuItem>
+                    </Link>
+                    <Link to='/shops-manager'>
+                      <MenuItem onClick={handleClose}>
                         Shops manager
-                      </Link>
-                    </MenuItem>
+                      </MenuItem>
+                    </Link>
+                    <Link to='/products-manager'>
+                      <MenuItem onClick={handleClose}>
+                        Products manager
+                      </MenuItem>
+                    </Link>
                   </div>
                   : null}
                 {userRole === 'Shop Owner' ?
                   <div>
-                    <MenuItem onClick={handleClose}>
-                      <Link to='/shop-brands-manager'>
+                    <Link to='/shop-brands-manager'>
+                      <MenuItem onClick={handleClose}>
                         Shop brands manager
-                      </Link>
-                    </MenuItem>
-                    <MenuItem onClick={handleClose}>
-                      <Link to='/shops-manager'>
+                      </MenuItem>
+                    </Link>
+                    <Link to='/shops-manager'>
+                      <MenuItem onClick={handleClose}>
                         Shops manager
-                      </Link>
-                    </MenuItem>
+                      </MenuItem>
+                    </Link>
+                    <Link to='/products-manager'>
+                      <MenuItem onClick={handleClose}>
+                        Products manager
+                      </MenuItem>
+                    </Link>
                   </div>
                   : null}
                 {userRole === 'Shop Manager' ?
                   <div>
-                    <MenuItem onClick={handleClose}>
-                      <Link to='/shops-manager'>
+                    <Link to='/shops-manager'>
+                      <MenuItem onClick={handleClose}>
                         Shops manager
-                      </Link>
-                    </MenuItem>
+                      </MenuItem>
+                    </Link>
+                    <Link to='/products-manager'>
+                      <MenuItem onClick={handleClose}>
+                        Products manager
+                      </MenuItem>
+                    </Link>
                   </div>
                   : null}
                 <MenuItem onClick={onSignOut}>Sign out</MenuItem>
@@ -189,15 +204,15 @@ const MenuAppBar = () => {
                 open={open}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleClose}>
-                  <Link to={{
-                    pathname: `/login`,
-                    search: '',
-                    state: { from: { pathname: '/#' + location.pathname } }
-                  }}>
+                <Link to={{
+                  pathname: `/login`,
+                  search: '',
+                  state: { from: { pathname: '/#' + location.pathname } }
+                }}>
+                  <MenuItem onClick={handleClose}>
                     Login
-                  </Link>
-                </MenuItem>
+                  </MenuItem>
+                </Link>
                 <MenuItem onClick={handleClose}>
                   <Link to='/sign-up'>
                     Register

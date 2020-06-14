@@ -1,15 +1,16 @@
 import * as React from 'react';
-import { useProducts } from '../../services/products.service';
-import { IProduct } from '../../globals/interfaces';
 import ProductCard from './ProductCard';
+import { selectProducts } from '../../redux/productsReducer';
+import { useSelector } from 'react-redux';
 
 const LatestProducts = () => {
-    const products = useProducts();
+    const products = useSelector(selectProducts);
     const [latestProducts, setLatestProducts] = React.useState([]);
 
     React.useEffect(() => {
-        products.getAllProducts().then((products: IProduct[]) => setLatestProducts(products.slice(Math.max(products.length - 5, 0))))
-    }, [])
+        if (!products || !products.length) return;
+        setLatestProducts(products.slice(Math.max(products.length - 5, 0)))
+    }, [products])
 
     return (
         <>

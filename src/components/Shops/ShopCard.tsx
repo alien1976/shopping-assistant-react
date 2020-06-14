@@ -48,8 +48,8 @@ const useStyles = makeStyles({
 });
 
 interface IProductCardProps {
-    shopBrandId: number
-    shopId: number
+    shopBrandId: string
+    shopId: string
     address: string
 }
 

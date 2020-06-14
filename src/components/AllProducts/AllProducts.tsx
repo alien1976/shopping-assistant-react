@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { useProducts } from '../../services/products.service';
 import { IProduct } from '../../globals/interfaces';
 import ProductCard from '../Products/ProductCard';
 import SearchIcon from '@material-ui/icons/Search';
@@ -7,6 +6,7 @@ import { InputLabel, TextField, Select, MenuItem, FormControl } from '@material-
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { useSelector } from 'react-redux';
 import { selectShopBrands } from '../../redux/shopBrandsReducer';
+import { selectProducts } from '../../redux/productsReducer';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -23,19 +23,17 @@ const useStyles = makeStyles((theme: Theme) =>
 const AllProducts = () => {
     const classes = useStyles();
     const searchBarRef = React.useRef(null);
-    const products = useProducts();
+    const products = useSelector(selectProducts);
     const [searchByValue, setSearchByValue] = React.useState('newest');
     const [currentShopBrand, setCurrentShopBrand] = React.useState('all');
-    const [allProducts, setAllProducts] = React.useState([]);
     const shopBrands = useSelector(selectShopBrands);
     const [filteredProducts, setFilteredProducts] = React.useState([]);
 
     React.useEffect(() => {
-        products.getAllProducts().then((products: IProduct[]) => {
-            setAllProducts(products)
-            setFilteredProducts(products)
-        })
-    }, [])
+        if (!products || !products.length) return;
+
+        setFilteredProducts(products)
+    }, [products])
 
     React.useEffect(() => {
         filterProducts();
@@ -48,7 +46,7 @@ const AllProducts = () => {
     const filterProducts = () => {
         const shopBrandProducts = currentShopBrand === 'all' ? 'all' : shopBrands.find((el) => el.id === currentShopBrand).productsIds;
 
-        const newProducts = allProducts.filter((el) => {
+        const newProducts = products.filter((el) => {
             return el.name.toLowerCase().indexOf(searchBarRef.current.value.toLowerCase()) !== -1 &&
                 (shopBrandProducts === 'all' || shopBrandProducts.indexOf(el.id) !== -1)
         })

@@ -15,7 +15,9 @@ const ShopBrandsManager = () => {
     const [state, setState] = React.useState<TableState>({
         columns: [
             { title: 'Shop brand name', field: 'name' },
-            { title: 'Image', field: 'image' },
+            {
+                title: 'Image', field: 'image', render: rowData => <div style={{ width: 50, height: 50, backgroundSize: 'contain', backgroundRepeat: 'no-repeat', backgroundPosition: 'center', backgroundImage: `url(${rowData.image})`, borderRadius: '50%' }}></div>
+            },
         ],
         data: []
     });
