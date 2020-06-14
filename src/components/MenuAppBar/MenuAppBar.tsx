@@ -135,6 +135,11 @@ const MenuAppBar = () => {
                         Shop brands manager
                       </Link>
                     </MenuItem>
+                    <MenuItem onClick={handleClose}>
+                      <Link to='/shops-manager'>
+                        Shops manager
+                      </Link>
+                    </MenuItem>
                   </div>
                   : null}
                 {userRole === 'Shop Owner' ?
@@ -142,6 +147,20 @@ const MenuAppBar = () => {
                     <MenuItem onClick={handleClose}>
                       <Link to='/shop-brands-manager'>
                         Shop brands manager
+                      </Link>
+                    </MenuItem>
+                    <MenuItem onClick={handleClose}>
+                      <Link to='/shops-manager'>
+                        Shops manager
+                      </Link>
+                    </MenuItem>
+                  </div>
+                  : null}
+                {userRole === 'Shop Manager' ?
+                  <div>
+                    <MenuItem onClick={handleClose}>
+                      <Link to='/shops-manager'>
+                        Shops manager
                       </Link>
                     </MenuItem>
                   </div>

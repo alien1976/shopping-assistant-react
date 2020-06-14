@@ -1,16 +1,16 @@
 import * as React from 'react';
-import { IShop } from '../../globals/interfaces';
 import ShopCard from './ShopCard';
-import { useShops } from '../../services/shops.service';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { selectShops } from '../../redux/shopsReducer';
 
 const PopularShops = () => {
-    const shops = useShops();
+    const shops = useSelector(selectShops);
     const [latestShops, setLatestShops] = React.useState([]);
 
     React.useEffect(() => {
-        shops.getAllShops().then((shops: IShop[]) => setLatestShops(shops.slice(Math.max(shops.length - 5, 0))))
-    }, [])
+        setLatestShops(shops.slice(Math.max(shops.length - 5, 0)));
+    }, [shops])
 
     return (
         <>

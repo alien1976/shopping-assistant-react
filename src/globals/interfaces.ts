@@ -21,11 +21,12 @@ export interface IShop {
 }
 
 export interface IShopBrand {
-    id: number;
+    id: string;
     name: string;
     shopsIds: number[];
     productsIds: number[];
     image: any;
+    [key: string]: string | number[] | any
 }
 
 export interface IUser {

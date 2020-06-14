@@ -4,13 +4,13 @@ import Typography from '@material-ui/core/Typography';
 import CardLoader from '../Loaders/CardLoader';
 import { useParams } from 'react-router-dom';
 import { Paper, Grid } from '@material-ui/core';
-import { IProduct, IShop, IShopBrand } from '../../globals/interfaces';
+import { IProduct } from '../../globals/interfaces';
 import { useProducts } from '../../services/products.service';
 import ItemLoader from '../Loaders/ItemLoader';
-import { useShops } from '../../services/shops.service';
 import ShopProducts from './ShopProducts';
-import { selectShopBrands } from '../../redux/shopBrandsReducer';
+import { selectShops } from '../../redux/shopsReducer';
 import { useSelector } from 'react-redux';
+import { selectShopBrands } from '../../redux/shopBrandsReducer';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme: Theme) =>
 const Shop = () => {
     const classes = useStyles();
     const products = useProducts();
-    const shops = useShops();
+    const shops = useSelector(selectShops);
     const shopBrands = useSelector(selectShopBrands);
     let { id } = useParams();
     const shopId = parseInt(id)
@@ -48,14 +48,21 @@ const Shop = () => {
     const [shopBrand, setShopBrand] = React.useState(null);
 
     React.useEffect(() => {
-        shops.getShop(shopId).then((shop: IShop) => {
-            setShop(shop);
-            setShopBrand(shopBrands.find((el) => el.id === shop.shopBrandId));
-            return products.getAllProductsByShopId(shopId)
-        }).then((products: IProduct[]) => {
+        if (!shops || !shops.length) return;
+
+        const shop = shops.find((el) => el.id === id);
+
+        if (!shop || !shopBrands || !shopBrands.length) return;
+
+        const shopBrand = shopBrands.find((el) => el.id === shop.shopBrandId)
+
+        setShop(shop);
+        setShopBrand(shopBrand);
+
+        products.getAllProductsByShopId(shopId).then((products: IProduct[]) => {
             setShopProducts(products);
         })
-    }, [shopBrands])
+    }, [shopBrands, shops])
 
     const mediaLoaded = !!shop && !!shopProducts && !!shopBrand;
 

@@ -120,3 +120,26 @@ const validateShopBrand = async (user, req, res) => {
 }
 
 exports.validateShopBrand = validateShopBrand;
+
+const validateShop = async (user, req, res) => {
+    try {
+        const validationConfig = {
+            name: 'required|string|min:1',
+            shopBrandId: 'required|string|min:1',
+            address: 'required|string|min:1',
+            shopGoogleMapsSrc: 'string|min:1',
+            map: 'object',
+            mapEntryPoint: 'string',
+            mapImage: 'string',
+        }
+
+        await indicative.validator.validate(user, validationConfig)
+
+        return true;
+    } catch (error) {
+        sendError(req, res, 400, `Invalid shop data: ${error.map(e => e.message).join(', ')}`, error);
+        return false;
+    }
+}
+
+exports.validateShop = validateShop;

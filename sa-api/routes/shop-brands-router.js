@@ -40,7 +40,7 @@ router.get('/:id', async (req, res) => {
 
         replaceId(shopBrand)
 
-        res.json(user);
+        res.json(shopBrand);
     } catch (errors) {
         sendError(req, res, 400, `Invalid shop brand data: ${errors.map(e => e.message).join(', ')}`, errors);
     }
@@ -97,8 +97,8 @@ router.put('/:id', async (req, res) => {
 
     //The shop brand name is updated then check for the new name existence
     if (oldShopBrand.name !== oldShopBrand.name) {
-        const isUserNameExists = await db.collection(SHOP_BRANDS_COLLECTION).findOne({ name: shopBrand.name });
-        if (isUserNameExists) {
+        const isShopBrandExists = await db.collection(SHOP_BRANDS_COLLECTION).findOne({ name: shopBrand.name });
+        if (isShopBrandExists) {
             sendError(req, res, 400, `Shop brand name: ${shopBrand.name} already exists`)
             return;
         }

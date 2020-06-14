@@ -3,10 +3,10 @@ import { IShop } from '../../globals/interfaces';
 import SearchIcon from '@material-ui/icons/Search';
 import { InputLabel, TextField, Select, MenuItem, FormControl } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import { useShops } from '../../services/shops.service';
 import ShopCard from '../Shops/ShopCard';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { selectShops } from '../../redux/shopsReducer';
 import { selectShopBrands } from '../../redux/shopBrandsReducer';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -24,18 +24,14 @@ const useStyles = makeStyles((theme: Theme) =>
 const AllShops = () => {
     const classes = useStyles();
     const searchBarRef = React.useRef(null);
-    const shops = useShops();
+    const shops = useSelector(selectShops);
     const shopBrands = useSelector(selectShopBrands);
     const [currentShopBrand, setCurrentShopBrand] = React.useState('all');
-    const [allShops, setAllShops] = React.useState([]);
     const [filteredShops, setFilteredShops] = React.useState([]);
 
     React.useEffect(() => {
-        shops.getAllShops().then((shops: IShop[]) => {
-            setAllShops(shops)
-            setFilteredShops(shops)
-        })
-    }, [])
+        setFilteredShops(shops)
+    }, [shops])
 
     React.useEffect(() => {
         filterShops();
@@ -48,7 +44,7 @@ const AllShops = () => {
     const filterShops = () => {
         const shopBrandShops = currentShopBrand === 'all' ? 'all' : shopBrands.find((el) => el.id === currentShopBrand).shopsIds;
 
-        const newShops = allShops.filter((el) => {
+        const newShops = shops.filter((el) => {
             return el.name.toLowerCase().indexOf(searchBarRef.current.value.toLowerCase()) !== -1 &&
                 (shopBrandShops === 'all' || shopBrandShops.indexOf(el.id) !== -1)
         })

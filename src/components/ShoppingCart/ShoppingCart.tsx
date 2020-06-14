@@ -1,17 +1,17 @@
 import * as React from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { Badge } from '@material-ui/core';
-import { IProduct, IShop } from '../../globals/interfaces';
+import { IProduct } from '../../globals/interfaces';
 import { useProducts } from '../../services/products.service';
 import ItemLoader from '../Loaders/ItemLoader';
 import ShopCard from '../Shops/ShopCard';
-import { useShops } from '../../services/shops.service';
 import { useSelector } from 'react-redux';
 import { selectCart } from '../../redux/cartReducer';
+import { selectShops } from '../../redux/shopsReducer';
 
 const ShoppingChart = () => {
     const history = useHistory();
-    const shopsService = useShops();
+    const allShops = useSelector(selectShops);
     const products = useProducts();
     const productsInCartIds = useSelector(selectCart);
     const [shops, setShops] = React.useState([]);
@@ -23,10 +23,7 @@ const ShoppingChart = () => {
         products.getAllProducts().then((allProducts: IProduct[]) => {
             productsTemp = allProducts.filter((el) => productsInCartIds.indexOf(el.id.toString()) !== -1);
             setAllProducts(productsTemp.map((el) => { return { ...el, bought: false } }));
-
-            return shopsService.getAllShops()
-        }).then((shops: IShop[]) => {
-            setShops(shops.filter((el) => productsTemp.findIndex((product) => product.shopId === el.id) !== -1))
+            setShops(allShops.filter((el) => productsTemp.findIndex((product) => product.shopId === el.id) !== -1))
         })
     }, [productsInCartIds])
 
