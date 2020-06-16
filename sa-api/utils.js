@@ -127,7 +127,7 @@ const validateShop = async (shop, req, res) => {
             name: 'required|string|min:1',
             shopBrandId: 'required|string|min:1',
             address: 'required|string|min:1',
-            map: 'object',
+            map: 'string',
             mapEntryPoint: 'string',
             mapImage: 'string',
         }

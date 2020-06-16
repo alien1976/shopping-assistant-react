@@ -146,7 +146,8 @@ const ShoppingNavigation = () => {
             findingPath.current = false;
             setLoadProcess(false);
         }
-        pathGeneratorWorker.postMessage({ mapPath: shop.map, mapEntryPoint: startPoint.current, products: availableProducts.map((el) => el.coordinates) });
+        console.log(availableProducts)
+        pathGeneratorWorker.postMessage({ mapPath: JSON.parse(shop.map), mapEntryPoint: startPoint.current, products: availableProducts.map((el) => el.coordinates) });
     }, [availableProducts])
 
     const toggleProduct = (event: React.MouseEvent<HTMLLIElement>) => {
@@ -189,7 +190,7 @@ const ShoppingNavigation = () => {
                         </Grid>
                         <Grid item xs={12} md={4} lg={6}>
                             <Typography variant='h5' className={classes.label}>Products to buy:</Typography>
-                            <Typography className={classes.label}>Total products price: {availableProducts.reduce((a, b) => a + b.price, 0)} lv.</Typography>
+                            <Typography className={classes.label}>Total products price: {availableProducts.reduce((a, b) => a + parseFloat(b.price), 0)} lv.</Typography>
                             <List>
                                 {orderedAvailableProducts.map((product: IProduct, index: number) => {
                                     return (<ListItem onClick={toggleProduct} data-id={product.id} data-isavailable={true}
@@ -208,7 +209,7 @@ const ShoppingNavigation = () => {
                                 })}
                             </List>
                             <Typography variant='h5' className={classes.label}>Bought products:</Typography>
-                            <Typography className={classes.label}>Total money spent: {boughtProducts.reduce((a, b) => a + b.price, 0)} lv.</Typography>
+                            <Typography className={classes.label}>Total money spent: {boughtProducts.reduce((a, b) => a + parseFloat(b.price), 0)} lv.</Typography>
                             <List>
                                 {boughtProducts.map((product: IProduct, index: number) => {
                                     return (<ListItem onClick={toggleProduct} data-id={product.id} data-isavailable={false}

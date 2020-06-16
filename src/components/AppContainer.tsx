@@ -24,6 +24,8 @@ import { getAllShopBrands } from '../redux/shopBrandsReducer';
 import { getAllShops } from '../redux/shopsReducer';
 import ProductsManager from './Products/ProductsManager';
 import { getAllProducts } from '../redux/productsReducer';
+import MapEditor from './Map/MapEditor/MapEditor';
+import MapProductPositionEditor from './Map/MapEditor/MapProductPositionEditor';
 
 const Home = () => {
     return (
@@ -137,6 +139,32 @@ const AppContainer = () => {
                             case USER_ROLES['Admin']:
                             case USER_ROLES['Shop Manager']:
                             case USER_ROLES['Shop Owner']: return <ProductsManager />
+                            default: {
+                                location.replace('/')
+                                dispatch(openSnackBar({ message: 'You don\'t have rights to access this page!', status: 'warning' }));
+                                return;
+                            }
+                        }
+                    }} />
+                    <Route path='/shop-map-editor/:id' render={() => {
+                        if (!isLoggedIn) return <Redirect to="/login" />
+                        switch (userRole) {
+                            case USER_ROLES['Admin']:
+                            case USER_ROLES['Shop Manager']:
+                            case USER_ROLES['Shop Owner']: return <MapEditor />
+                            default: {
+                                location.replace('/')
+                                dispatch(openSnackBar({ message: 'You don\'t have rights to access this page!', status: 'warning' }));
+                                return;
+                            }
+                        }
+                    }} />
+                    <Route path='/product-map-editor/:id' render={() => {
+                        if (!isLoggedIn) return <Redirect to="/login" />
+                        switch (userRole) {
+                            case USER_ROLES['Admin']:
+                            case USER_ROLES['Shop Manager']:
+                            case USER_ROLES['Shop Owner']: return <MapProductPositionEditor />
                             default: {
                                 location.replace('/')
                                 dispatch(openSnackBar({ message: 'You don\'t have rights to access this page!', status: 'warning' }));

@@ -5,6 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { openSnackBar } from '../../redux/snackBarReducer';
 import { IShop, IShopBrand } from '../../globals/interfaces';
 import { selectShopBrands } from '../../redux/shopBrandsReducer';
+import MapIcon from '@material-ui/icons/Map';
+import { Link } from 'react-router-dom';
 
 interface TableState {
     columns: Array<Column<IShop>>;
@@ -32,8 +34,19 @@ const ShopsManager = () => {
             { title: 'Shop name', field: 'name' },
             { title: 'Shop address', field: 'address' },
             { title: 'Shop brand', field: 'shopBrandId', lookup: shopBrandsOptions },
-            // { title: 'Мap', field: 'address' },
-            // { title: 'Map image', field: 'mapImage' },
+            {
+                title: 'Мap', field: 'map', render: (rowData) => {
+                    return (
+                        <Link to={`/shop-map-editor/${rowData.id}`}>
+                            <MapIcon></MapIcon>
+                        </Link>
+                    )
+                },
+                editComponent: (item) => {
+                    return null;
+                }
+            },
+            { title: 'Map image', field: 'mapImage' },
         ],
         data: []
     });

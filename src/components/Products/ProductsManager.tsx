@@ -7,6 +7,8 @@ import { IProduct, IShopBrand, IShop } from '../../globals/interfaces';
 import { selectShopBrands } from '../../redux/shopBrandsReducer';
 import { selectShops } from '../../redux/shopsReducer';
 import { Select, MenuItem } from '@material-ui/core';
+import { Link } from 'react-router-dom';
+import LocationOnIcon from '@material-ui/icons/LocationOn';
 
 interface TableState {
     columns: Array<Column<IProduct>>;
@@ -70,6 +72,18 @@ const ProductsManager = () => {
             },
             {
                 title: 'Image', field: 'image', render: rowData => <div style={{ width: 50, height: 50, backgroundSize: 'contain', backgroundRepeat: 'no-repeat', backgroundPosition: 'center', backgroundImage: `url(${rowData.image})`, borderRadius: '50%' }}></div>
+            },
+            {
+                title: 'Product location', field: 'coordinates', render: (rowData) => {
+                    return (
+                        <Link to={`/product-map-editor/${rowData.id}`}>
+                            <LocationOnIcon></LocationOnIcon>
+                        </Link>
+                    )
+                },
+                editComponent: (item) => {
+                    return null;
+                }
             },
         ],
         data: []

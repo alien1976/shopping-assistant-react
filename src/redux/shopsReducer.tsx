@@ -33,7 +33,7 @@ export const updateShop = (shop: IShop) => async (dispatch: React.Dispatch<AnyAc
     try {
         await shopsService.updateShop(shop);
         getAllShops();
-        dispatch(openSnackBar({ message: `Successfully updated user shop ${shop.name}!`, status: 'success' }));
+        dispatch(openSnackBar({ message: `Successfully updated shop ${shop.name}!`, status: 'success' }));
     } catch (error) {
         dispatch(openSnackBar({ message: error.message, status: 'error' }))
     }
@@ -43,7 +43,7 @@ export const deleteShop = (shop: IShop) => async (dispatch: React.Dispatch<AnyAc
     try {
         await shopsService.deleteShop(shop.id.toString());
         getAllShops();
-        dispatch(openSnackBar({ message: `Successfully deleted user account!`, status: 'success' }));
+        dispatch(openSnackBar({ message: `Successfully deleted shop!`, status: 'success' }));
     } catch (error) {
         dispatch(openSnackBar({ message: error.message, status: 'error' }))
     }

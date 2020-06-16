@@ -1,7 +1,7 @@
 export interface IProduct {
     id: string
     name: string
-    price: number
+    price: string
     image: string
     description?: string
     coordinates?: string
@@ -14,7 +14,7 @@ export interface IShop {
     shopBrandId: string;
     name: string;
     address: string;
-    map: {};
+    map: string;
     mapImage: string
     mapEntryPoint: string
     shopGoogleMapsSrc: string
@@ -40,4 +40,8 @@ export interface IUser {
     firstName: string
     lastName: string
     role: string
+}
+
+export interface IMap {
+    [key: string]: { coord: string, weight: string }[]
 }

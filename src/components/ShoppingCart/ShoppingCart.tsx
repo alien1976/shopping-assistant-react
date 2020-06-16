@@ -24,21 +24,21 @@ const ShoppingChart = () => {
         setShops(allShops.filter((el) => productsTemp.findIndex((product) => product.shopId === el.id) !== -1))
     }, [productsInCartIds, products, allShops])
 
-    const getShopBrandProductsCount = React.useCallback((shopBrandId: number) => {
+    const getShopBrandProductsCount = React.useCallback((shopId: string) => {
         let count = 0;
 
         for (let product of allProducts) {
-            if (product.shopId === shopBrandId) count++;
+            if (product.shopId === shopId) count++;
         }
 
         return count;
     }, [allProducts]);
 
-    const getShopBrandCartProducts = React.useCallback((shopBrandId: number) => {
+    const getShopBrandCartProducts = React.useCallback((shopId: string) => {
         const products = [];
 
         for (let product of allProducts) {
-            if (product.shopId === shopBrandId) products.push(product);
+            if (product.shopId === shopId) products.push(product);
         }
 
         return products;
