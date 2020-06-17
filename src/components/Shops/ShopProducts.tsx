@@ -50,13 +50,13 @@ const ShopProducts = ({ allProducts }: { allProducts: IProduct[] }) => {
         switch (searchByValue) {
             case 'low-high': {
                 products.sort((a: IProduct, b: IProduct) => {
-                    return parseFloat(a.price) - parseFloat(b.price)
+                    return a.price - b.price
                 })
                 break;
             }
             case 'high-low': {
                 products.sort((a: IProduct, b: IProduct) => {
-                    return parseFloat(b.price) - parseFloat(a.price)
+                    return b.price - a.price
                 })
                 break;
             }

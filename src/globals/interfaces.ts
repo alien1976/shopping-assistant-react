@@ -1,7 +1,7 @@
 export interface IProduct {
     id: string
     name: string
-    price: string
+    price: number
     image: string
     description?: string
     coordinates?: string
@@ -43,5 +43,5 @@ export interface IUser {
 }
 
 export interface IMap {
-    [key: string]: { coord: string, weight: string }[]
+    [key: string]: { coord: string, weight: number }[]
 }

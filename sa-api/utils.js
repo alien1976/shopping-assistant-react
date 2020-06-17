@@ -150,7 +150,7 @@ const validateProduct = async (product, req, res) => {
             name: 'required|string|min:1',
             shopBrandId: 'required|string|min:1',
             shopId: 'required|string|min:1',
-            price: 'required|string|min:1',
+            price: 'required|number',
             image: 'required|string|min:1'
         }
 

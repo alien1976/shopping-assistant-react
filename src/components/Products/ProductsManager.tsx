@@ -6,7 +6,7 @@ import { openSnackBar } from '../../redux/snackBarReducer';
 import { IProduct, IShopBrand, IShop } from '../../globals/interfaces';
 import { selectShopBrands } from '../../redux/shopBrandsReducer';
 import { selectShops } from '../../redux/shopsReducer';
-import { Select, MenuItem } from '@material-ui/core';
+import { Select, MenuItem, TextField } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 
@@ -44,7 +44,22 @@ const ProductsManager = () => {
     const [state, setState] = React.useState<TableState>({
         columns: [
             { title: 'Product name', field: 'name' },
-            { title: 'Product price', field: 'price' },
+            {
+                title: 'Product price', field: 'price', editComponent: (props) => {
+                    return <TextField
+                        id="standard-number"
+                        type="number"
+                        inputProps={{ step: 0.01, min: 0.01 }}
+                        onChange={e => {
+                            props.onChange(e.target.value);
+                        }}
+                        value={props.value || 0.01}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                    />
+                }
+            },
             { title: 'Shop brand', field: 'shopBrandId', lookup: shopBrandsOptions },
             {
                 title: 'Shop', field: 'shopId', lookup: shopOptions, editComponent: (props) => {
@@ -107,6 +122,7 @@ const ProductsManager = () => {
 
     const onAddProduct = async (product: IProduct) => {
         try {
+            product.price = parseFloat(product.price.toString())
             await productsService.addProduct(product);
             dispatch(openSnackBar({ message: `Successfully added ${product.name}`, status: 'success' }))
         } catch (error) {
@@ -129,6 +145,7 @@ const ProductsManager = () => {
 
     const onUpdateProduct = async (product: IProduct) => {
         try {
+            product.price = parseFloat(product.price.toString())
             await productsService.updateProduct(product);
             dispatch(openSnackBar({ message: `Successfully updated ${product.name}`, status: 'success' }))
         } catch (error) {

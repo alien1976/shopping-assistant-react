@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { IStoreState } from '../../../redux/store';
 import { selectShops, updateShop } from '../../../redux/shopsReducer';
-import { Grid, makeStyles, createStyles, Button, Typography } from '@material-ui/core';
+import { Grid, makeStyles, createStyles, Button, Typography, IconButton } from '@material-ui/core';
 import ToggleButton from '@material-ui/lab/ToggleButton';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 import CreateIcon from '@material-ui/icons/Create';
@@ -14,6 +14,9 @@ import LinearScaleIcon from '@material-ui/icons/LinearScale';
 import OpenWithIcon from '@material-ui/icons/OpenWith';
 import DeleteForeverOutlinedIcon from '@material-ui/icons/DeleteForeverOutlined';
 import TransitEnterexitIcon from '@material-ui/icons/TransitEnterexit';
+import PostAddIcon from '@material-ui/icons/PostAdd';
+import SaveAltIcon from '@material-ui/icons/SaveAlt';
+import { openSnackBar } from '../../../redux/snackBarReducer';
 
 // import ShopMap from './shopMap.svg'
 const EDITOR_MODES = {
@@ -46,12 +49,16 @@ const useStyles = makeStyles(() =>
         submit: {
             backgroundColor: 'gray',
             width: '30%'
-        }
+        },
+        input: {
+            display: 'none',
+        },
     }),
 );
 
 const MapEditor = () => {
     const dispatch = useDispatch();
+    const mapImporter = React.useRef(null);
     const classes = useStyles();
     const { id } = useParams();
     const shops = useSelector(selectShops);
@@ -328,12 +335,46 @@ const MapEditor = () => {
         setEditorMode(newMode);
     };
 
+    const importMapFromFile = (event: React.ChangeEvent<HTMLInputElement>) => {
+        console.log(event.target.files);
+        var reader = new FileReader();
+        reader.readAsText(event.target.files[0], "UTF-8");
+        reader.onload = function (evt) {
+            setAdjList(JSON.parse(evt.target.result as string))
+        }
+        reader.onerror = function (evt) {
+            dispatch(openSnackBar({ message: 'Unable to load file! Try again later', status: 'warning' }))
+        }
+    }
+
+    const exportMapToFile = () => {
+        var a = document.createElement('a');
+        a.setAttribute('href', 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(adjList)));
+        a.setAttribute('download', shop.name + '_' + shop.id + '.json');
+        a.click()
+    }
+
     return (
         <>
             <Grid container spacing={4} className={classes.root}>
                 <Grid item xs={12} className={classes.mapGrid}>
                     <Typography variant="h4">{shop.name}</Typography>
                     <Typography variant="h5">{shop.address}</Typography>
+                </Grid>
+                <Grid item xs={12} className={classes.mapGrid}>
+                    <div>
+                        <input accept="application/json" onChange={importMapFromFile} className={classes.input} id="import-map-button-file" type="file" />
+                        <label htmlFor="import-map-button-file">
+                            <IconButton title='Import map from file' color="inherit" aria-label="upload picture" component="span">
+                                <PostAddIcon />
+                            </IconButton>
+                        </label>
+                        <label htmlFor="export-map-button-file">
+                            <IconButton onClick={exportMapToFile} title='Export map to file' color="inherit" aria-label="upload picture" component="span">
+                                <SaveAltIcon />
+                            </IconButton>
+                        </label>
+                    </div>
                     <div className="map-editor-wrapper">
                         <div className="map" style={mapStyles}>
                             <svg ref={svgRef} className={getSVGClassByMode()} onMouseDown={startDraggingPoint} onMouseMove={dragPoint} onMouseUp={onDragEnds} onClick={addPoint} version="1.1" viewBox="0.0 0.0 500.0 488.0" fill="none" stroke="none" >
@@ -342,7 +383,7 @@ const MapEditor = () => {
                                         {Object.keys(adjList).map((vertex) => {
                                             const [x1, y1] = vertex.split(',');
                                             const edjes = adjList[vertex];
-                                            return edjes.map((edje: { coord: string, weight: string }) => {
+                                            return edjes.map((edje: { coord: string, weight: number }) => {
                                                 const [x2, y2] = edje.coord.split(',');
                                                 return <line onClick={lineAction} className={getLineClassByMode()} key={'(' + x1 + ',' + y1 + ')' + '(' + x2 + ',' + y2 + ')'} x1={x1} x2={x2} y1={y1} y2={y2} strokeLinecap="round" stroke={LINE_COLOR} strokeWidth={routeScale}></line>
                                             })
@@ -378,19 +419,19 @@ const MapEditor = () => {
                         exclusive
                         onChange={handleModeChange}
                     >
-                        <ToggleButton value={EDITOR_MODES.ADDING_POINTS} aria-label="left aligned">
+                        <ToggleButton title='Add points' value={EDITOR_MODES.ADDING_POINTS}>
                             <CreateIcon />
                         </ToggleButton>
-                        <ToggleButton value={EDITOR_MODES.CONNECTING_POINTS} aria-label="centered">
+                        <ToggleButton title='Connect points' value={EDITOR_MODES.CONNECTING_POINTS} aria-label="centered">
                             <LinearScaleIcon />
                         </ToggleButton>
-                        <ToggleButton value={EDITOR_MODES.MOVING_POINTS} aria-label="right aligned">
+                        <ToggleButton title='Move points' value={EDITOR_MODES.MOVING_POINTS} aria-label="right aligned">
                             <OpenWithIcon />
                         </ToggleButton>
-                        <ToggleButton value={EDITOR_MODES.DELETING} aria-label="justified">
+                        <ToggleButton title='Delete points' value={EDITOR_MODES.DELETING} aria-label="justified">
                             <DeleteForeverOutlinedIcon />
                         </ToggleButton>
-                        <ToggleButton value={EDITOR_MODES.SELECTING_ENTRY_POINT} aria-label="justified">
+                        <ToggleButton title='Select entry point' value={EDITOR_MODES.SELECTING_ENTRY_POINT} aria-label="justified">
                             <TransitEnterexitIcon />
                         </ToggleButton>
                     </ToggleButtonGroup>

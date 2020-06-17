@@ -4,10 +4,10 @@ export const getWeight = (point1: string, point2: string) => {
     const [x1, y1] = point1.split(',');
     const [x2, y2] = point2.split(',');
 
-    return Math.sqrt(Math.pow(parseFloat(y2) - parseFloat(y1), 2) + Math.pow(parseFloat(x2) - parseFloat(x1), 2)).toString()
+    return Math.sqrt(Math.pow(parseFloat(y2) - parseFloat(y1), 2) + Math.pow(parseFloat(x2) - parseFloat(x1), 2))
 }
 
-export const findEdjeIndex = (edjesArray: { coord: string, weight: string }[], pointCoords: string) => {
+export const findEdjeIndex = (edjesArray: { coord: string, weight: number }[], pointCoords: string) => {
     for (let i = 0; i < edjesArray.length; i++) {
         if (edjesArray[i].coord === pointCoords) {
             return i;
