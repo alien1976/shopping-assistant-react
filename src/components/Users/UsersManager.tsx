@@ -52,8 +52,8 @@ const UsersManager = () => {
 
     const onAddUser = async (user: IUser) => {
         try {
-            user.password = generatePassword();
-            console.log(user.password)
+            // user.password = generatePassword(); //send password to the user's email
+            user.password = user.userName;
             await userService.registerUser(user);
             dispatch(openSnackBar({ message: `Successfully added ${user.userName}`, status: 'success' }))
         } catch (error) {

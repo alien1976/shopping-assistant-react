@@ -4,6 +4,8 @@ const replaceId = require('../utils').replaceObjectId;
 const validateShop = require('../utils').validateShop;
 const ObjectID = require('mongodb').ObjectID;
 const indicative = require('indicative');
+const verifyToken = require('./verify-token');
+const verifyRole = require('./verify-role');
 
 const router = express.Router();
 const SHOPS_COLLECTION = 'shops';
@@ -75,13 +77,13 @@ const removeShopFromShopBrand = async (shop, db) => {
     return true;
 }
 
-router.post('/', async (req, res) => {
+router.post('/', verifyToken, verifyRole(['Admin', 'Shop Owner', 'Shop Manager']), async (req, res) => {
     const db = req.app.locals.db;
     const shop = req.body;
 
     if (!await validateShop(shop, req, res)) return;
 
-    if (!shop.map) shop.map = {};
+    if (!shop.map) shop.map = '{}';
     if (!shop.mapEntryPoint) shop.mapEntryPoint = '';
     if (!shop.mapImage) shop.mapImage = '';
     if (!shop.shopGoogleMapsSrc) shop.shopGoogleMapsSrc = '';
@@ -113,7 +115,7 @@ router.post('/', async (req, res) => {
     }
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', verifyToken, verifyRole(['Admin', 'Shop Owner', 'Shop Manager']), async (req, res) => {
     const shopId = req.params.id;
     const mongoId = new ObjectID(shopId)
     const db = req.app.locals.db;
@@ -174,7 +176,7 @@ router.put('/:id', async (req, res) => {
     }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', verifyToken, verifyRole(['Admin', 'Shop Owner', 'Shop Manager']), async (req, res) => {
     const params = req.params;
     const shopId = req.params.id;
     const db = req.app.locals.db;

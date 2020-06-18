@@ -58,7 +58,6 @@ const useStyles = makeStyles(() =>
 
 const MapEditor = () => {
     const dispatch = useDispatch();
-    const mapImporter = React.useRef(null);
     const classes = useStyles();
     const { id } = useParams();
     const shops = useSelector(selectShops);
@@ -100,10 +99,6 @@ const MapEditor = () => {
             return { ...prevList, [point]: [] }
         });
     }
-
-    // const getVectorDistance = (x1, y1, x2, y2) => {
-    //     return Math.sqrt(Math.pow(y2 - y1, 2) + Math.pow(x2 - x1, 2))
-    // }
 
     const addEdge = (point1: string, point2: string) => {
         setAdjList((prevMap: IMap) => {
@@ -336,7 +331,6 @@ const MapEditor = () => {
     };
 
     const importMapFromFile = (event: React.ChangeEvent<HTMLInputElement>) => {
-        console.log(event.target.files);
         var reader = new FileReader();
         reader.readAsText(event.target.files[0], "UTF-8");
         reader.onload = function (evt) {
@@ -358,8 +352,8 @@ const MapEditor = () => {
         <>
             <Grid container spacing={4} className={classes.root}>
                 <Grid item xs={12} className={classes.mapGrid}>
-                    <Typography variant="h4">{shop.name}</Typography>
-                    <Typography variant="h5">{shop.address}</Typography>
+                    <Typography variant="h4">{shop && shop.name}</Typography>
+                    <Typography variant="h5">{shop && shop.address}</Typography>
                 </Grid>
                 <Grid item xs={12} className={classes.mapGrid}>
                     <div>

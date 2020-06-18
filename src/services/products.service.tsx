@@ -1,5 +1,5 @@
 import { SA_API_BASE } from "../globals/constants";
-import { handleResponse } from "../utils/utils";
+import { handleResponse, authHeader } from "../utils/utils";
 import { IProduct } from "../globals/interfaces";
 
 const getAllProducts = async () => {
@@ -23,7 +23,7 @@ const getProductById = async (id: string) => {
 const addProduct = async (product: IProduct) => {
     const requestOptions = {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
         body: JSON.stringify(product)
     };
 
@@ -34,7 +34,7 @@ const addProduct = async (product: IProduct) => {
 const updateProduct = async (product: IProduct) => {
     const requestOptions = {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
         body: JSON.stringify(product)
     };
 
@@ -44,7 +44,8 @@ const updateProduct = async (product: IProduct) => {
 
 const deleteProduct = async (shopBrandId: string) => {
     const requestOptions = {
-        method: 'DELETE'
+        method: 'DELETE',
+        header: authHeader()
     };
 
     const response = fetch(`${SA_API_BASE}/products/${shopBrandId}`, requestOptions)

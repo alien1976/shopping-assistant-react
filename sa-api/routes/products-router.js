@@ -4,6 +4,8 @@ const replaceId = require('../utils').replaceObjectId;
 const validateProduct = require('../utils').validateProduct;
 const ObjectID = require('mongodb').ObjectID;
 const indicative = require('indicative');
+const verifyToken = require('./verify-token');
+const verifyRole = require('./verify-role');
 
 const router = express.Router();
 const PRODUCTS_COLLECTION = 'products';
@@ -75,7 +77,7 @@ const removeProductFromShopBrand = async (product, db) => {
     return true;
 }
 
-router.post('/', async (req, res) => {
+router.post('/', verifyToken, verifyRole(['Admin', 'Shop Owner', 'Shop Manager']), async (req, res) => {
     const db = req.app.locals.db;
     const product = req.body;
 
@@ -110,7 +112,7 @@ router.post('/', async (req, res) => {
     }
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', verifyToken, verifyRole(['Admin', 'Shop Owner', 'Shop Manager']), async (req, res) => {
     const productId = req.params.id;
     const mongoId = new ObjectID(productId)
     const db = req.app.locals.db;
@@ -171,7 +173,7 @@ router.put('/:id', async (req, res) => {
     }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', verifyToken, verifyRole(['Admin', 'Shop Owner', 'Shop Manager']), async (req, res) => {
     const params = req.params;
     const productId = req.params.id;
     const db = req.app.locals.db;

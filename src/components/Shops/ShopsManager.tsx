@@ -26,7 +26,6 @@ const ShopsManager = () => {
 
         return options;
     }, [shopBrands]);
-    console.log(shopBrands)
 
     const dispatch = useDispatch()
     const [state, setState] = React.useState<TableState>({

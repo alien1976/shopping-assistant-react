@@ -1,5 +1,5 @@
 import { SA_API_BASE } from "../globals/constants";
-import { handleResponse } from "../utils/utils";
+import { handleResponse, authHeader } from "../utils/utils";
 import { IShop } from "../globals/interfaces";
 
 const getAllShops = async () => {
@@ -23,7 +23,7 @@ const getShopById = async (id: string) => {
 const addShop = async (shopBrand: IShop) => {
     const requestOptions = {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
         body: JSON.stringify(shopBrand)
     };
 
@@ -34,7 +34,7 @@ const addShop = async (shopBrand: IShop) => {
 const updateShop = async (shopBrand: IShop) => {
     const requestOptions = {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
         body: JSON.stringify(shopBrand)
     };
 
@@ -44,7 +44,8 @@ const updateShop = async (shopBrand: IShop) => {
 
 const deleteShop = async (shopBrandId: string) => {
     const requestOptions = {
-        method: 'DELETE'
+        method: 'DELETE',
+        header: authHeader()
     };
 
     const response = fetch(`${SA_API_BASE}/shops/${shopBrandId}`, requestOptions)
