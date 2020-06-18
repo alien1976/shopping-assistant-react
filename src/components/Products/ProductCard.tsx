@@ -8,6 +8,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
+import StarIcon from '@material-ui/icons/Star';
 import ShoppingCartOutlinedIcon from '@material-ui/icons/ShoppingCartOutlined';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import { CARD_WIDTH, CARD_HEIGHT } from '../../globals/constants';
@@ -18,6 +19,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { IStoreState } from '../../redux/store';
 import { IProduct } from '../../globals/interfaces';
 import { selectLoggedIn } from '../../redux/authenticationReducer';
+import { addProductToFavorites, selectUserFavoritesProducts, removeProductFromFavorites } from '../../redux/userReducer';
 
 const useStyles = makeStyles({
     root: {
@@ -74,6 +76,13 @@ const ProductCard = ({ product }: IProductCardProps) => {
     const { image, id, name, price } = product;
     const classes = useStyles();
     const isInCart = useSelector((state: IStoreState) => state.appState.cart.indexOf(id.toString()) !== -1);
+    const favoriteProducts = useSelector(selectUserFavoritesProducts);
+    const isProductInFavorite = React.useMemo(() => {
+        if (!favoriteProducts) return false;
+
+        return favoriteProducts.indexOf(product.id) !== -1;
+    }, [favoriteProducts]);
+
     const dispatch = useDispatch();
     const isUserLogged = useSelector(selectLoggedIn);
     const mediaLoaded = !!image && !!name;
@@ -83,6 +92,14 @@ const ProductCard = ({ product }: IProductCardProps) => {
             dispatch(removeProductFromCart(id.toString()));
         } else {
             dispatch(addProductToCart(id.toString()));
+        }
+    }
+
+    const addToFavorites = () => {
+        if (!isProductInFavorite) {
+            dispatch(addProductToFavorites(product.id))
+        } else {
+            dispatch(removeProductFromFavorites(product.id))
         }
     }
 
@@ -113,8 +130,8 @@ const ProductCard = ({ product }: IProductCardProps) => {
                 </Typography>
                 </div>
                 <CardActions className={classes.cardActions}>
-                    {isUserLogged && <IconButton aria-label="delete" size="small" className={classes.iconButton}>
-                        <StarBorderIcon />
+                    {isUserLogged && <IconButton onClick={addToFavorites} aria-label="delete" size="small" className={classes.iconButton}>
+                        {isProductInFavorite ? <StarIcon /> : <StarBorderIcon />}
                     </IconButton>}
                     <IconButton aria-label="add-to-cart" size="small" onClick={productToCartToggle} className={classes.iconButton}>
                         {isInCart ?

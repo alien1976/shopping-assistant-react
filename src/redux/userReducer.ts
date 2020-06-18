@@ -59,6 +59,39 @@ export const updateUserData = (user: IUser) => async (dispatch: React.Dispatch<A
     }
 };
 
+export const addProductToFavorites = (productId: string) => async (dispatch: React.Dispatch<AnyAction>, getState: any) => {
+    const user = { ...getState().userState.user };
+
+    if (!user.favoriteProducts) user.favoriteProducts = [];
+    if (user.favoriteProducts.indexOf(productId) !== -1) return;
+
+    user.favoriteProducts = user.favoriteProducts.concat([productId]);
+
+    try {
+        await userService.updateUser(user);
+        dispatch(setUser(user))
+        dispatch(openSnackBar({ message: `Added to favorites!`, status: 'success' }));
+    } catch (error) {
+        dispatch(openSnackBar({ message: error.message, status: 'error' }))
+    }
+};
+
+export const removeProductFromFavorites = (productId: string) => async (dispatch: React.Dispatch<AnyAction>, getState: any) => {
+    const user = { ...getState().userState.user } as IUser;
+
+    if (!user.favoriteProducts || !user.favoriteProducts.length) return;
+
+    user.favoriteProducts = user.favoriteProducts.filter((el) => el !== productId)
+
+    try {
+        await userService.updateUser(user);
+        dispatch(setUser(user))
+        dispatch(openSnackBar({ message: `Removed product from favorites!`, status: 'success' }));
+    } catch (error) {
+        dispatch(openSnackBar({ message: error.message, status: 'error' }))
+    }
+};
+
 export const deleteUser = (userId: string) => async (dispatch: React.Dispatch<AnyAction>) => {
     dispatch(setDeletingUser(true));
 
@@ -79,5 +112,6 @@ export const deleteUser = (userId: string) => async (dispatch: React.Dispatch<An
 export const selectUser = (state: IStoreState) => state.userState.user;
 export const selectUserRole = (state: IStoreState) => state.userState.user && state.userState.user.role;
 export const selectUpdatingUser = (state: IStoreState) => state.userState.updatingUser;
+export const selectUserFavoritesProducts = (state: IStoreState) => state.userState.user.favoriteProducts;
 
 export default userSlice.reducer;

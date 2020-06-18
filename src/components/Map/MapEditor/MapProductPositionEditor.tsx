@@ -126,9 +126,9 @@ const MapProductPositionEditor = () => {
     return (
         <Grid container spacing={4} className={classes.root}>
             <Grid item xs={12} className={classes.mapGrid}>
-                <Typography variant="h4">{shop.name}</Typography>
-                <Typography variant="h5">{shop.address}</Typography>
-                <Typography variant="h5">Product: {product.name}</Typography>
+                <Typography variant="h4">{shop && shop.name}</Typography>
+                <Typography variant="h5">{shop && shop.address}</Typography>
+                <Typography variant="h5">Product: {product && product.name}</Typography>
                 <div className="map-editor-wrapper">
                     <div className="map" style={mapStyles}>
                         <svg ref={svgRef} className='disabled-cursor' onMouseDown={startDraggingPoint} onMouseMove={dragPoint} onMouseUp={onDragEnds} version="1.1" viewBox="0.0 0.0 500.0 488.0" fill="none" stroke="none" >

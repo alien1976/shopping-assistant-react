@@ -7,6 +7,7 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import LockOpenIcon from '@material-ui/icons/LockOpen';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import StarIcon from '@material-ui/icons/Star';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
@@ -18,7 +19,7 @@ import { Badge } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectCartLength } from '../../redux/cartReducer';
 import { selectLoggedIn, logoutRequest } from '../../redux/authenticationReducer';
-import { selectUserRole } from '../../redux/userReducer';
+import { selectUserRole, selectUserFavoritesProducts } from '../../redux/userReducer';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -46,6 +47,7 @@ const MenuAppBar = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const productsInCart = useSelector(selectCartLength);
+  const favoriteProducts = useSelector(selectUserFavoritesProducts);
   const isUserLogged = useSelector(selectLoggedIn);
   const [isDrawerOpened, setIsDrawerOpened] = React.useState(false)
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -85,6 +87,14 @@ const MenuAppBar = () => {
           </Link>
           <Typography variant="h5" className={classes.title}>
           </Typography>
+          {isUserLogged &&
+            <IconButton color="inherit">
+              <Link to='/user-favorite-products'>
+                <Badge badgeContent={favoriteProducts && favoriteProducts.length} color="primary">
+                  <StarIcon />
+                </Badge>
+              </Link>
+            </IconButton>}
           <IconButton color="inherit">
             <Link to='/shopping-cart'>
               <Badge badgeContent={productsInCart} color="secondary">

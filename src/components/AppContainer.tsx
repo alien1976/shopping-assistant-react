@@ -26,6 +26,7 @@ import ProductsManager from './Products/ProductsManager';
 import { getAllProducts } from '../redux/productsReducer';
 import MapEditor from './Map/MapEditor/MapEditor';
 import MapProductPositionEditor from './Map/MapEditor/MapProductPositionEditor';
+import UserFavoriteProducts from './Users/UserFavoriteProducts';
 
 const Home = () => {
     return (
@@ -97,6 +98,11 @@ const AppContainer = () => {
                         !isLoggedIn ?
                             <Redirect to="/login" />
                             : <Profile />
+                    )} />
+                    <Route path='/user-favorite-products' render={props => (
+                        !isLoggedIn ?
+                            <Redirect to="/login" />
+                            : <UserFavoriteProducts />
                     )} />
                     <Route path='/users-manager' render={() => {
                         if (!isLoggedIn) return <Redirect to="/login" />
