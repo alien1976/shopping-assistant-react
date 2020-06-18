@@ -118,17 +118,67 @@ const MenuAppBar = () => {
                 open={open}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleClose}>
-                  <Link to='/user-profile'>
-                    Profile
-                  </Link>
-                </MenuItem>
-                {userRole === 'Admin' ?
+                <Link to='/user-profile'>
                   <MenuItem onClick={handleClose}>
-                    <Link to='/users-manager'>
-                      Users manager
-                  </Link>
+                    Profile
                   </MenuItem>
+                </Link>
+                {userRole === 'Admin' ?
+                  <div>
+                    <Link to='/users-manager'>
+                      <MenuItem onClick={handleClose}>
+                        Users manager
+                      </MenuItem>
+                    </Link>
+                    <Link to='/shop-brands-manager'>
+                      <MenuItem onClick={handleClose}>
+                        Shop brands manager
+                      </MenuItem>
+                    </Link>
+                    <Link to='/shops-manager'>
+                      <MenuItem onClick={handleClose}>
+                        Shops manager
+                      </MenuItem>
+                    </Link>
+                    <Link to='/products-manager'>
+                      <MenuItem onClick={handleClose}>
+                        Products manager
+                      </MenuItem>
+                    </Link>
+                  </div>
+                  : null}
+                {userRole === 'Shop Owner' ?
+                  <div>
+                    <Link to='/shop-brands-manager'>
+                      <MenuItem onClick={handleClose}>
+                        Shop brands manager
+                      </MenuItem>
+                    </Link>
+                    <Link to='/shops-manager'>
+                      <MenuItem onClick={handleClose}>
+                        Shops manager
+                      </MenuItem>
+                    </Link>
+                    <Link to='/products-manager'>
+                      <MenuItem onClick={handleClose}>
+                        Products manager
+                      </MenuItem>
+                    </Link>
+                  </div>
+                  : null}
+                {userRole === 'Shop Manager' ?
+                  <div>
+                    <Link to='/shops-manager'>
+                      <MenuItem onClick={handleClose}>
+                        Shops manager
+                      </MenuItem>
+                    </Link>
+                    <Link to='/products-manager'>
+                      <MenuItem onClick={handleClose}>
+                        Products manager
+                      </MenuItem>
+                    </Link>
+                  </div>
                   : null}
                 <MenuItem onClick={onSignOut}>Sign out</MenuItem>
               </Menu>
@@ -154,15 +204,15 @@ const MenuAppBar = () => {
                 open={open}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleClose}>
-                  <Link to={{
-                    pathname: `/login`,
-                    search: '',
-                    state: { from: { pathname: '/#' + location.pathname } }
-                  }}>
+                <Link to={{
+                  pathname: `/login`,
+                  search: '',
+                  state: { from: { pathname: '/#' + location.pathname } }
+                }}>
+                  <MenuItem onClick={handleClose}>
                     Login
-                  </Link>
-                </MenuItem>
+                  </MenuItem>
+                </Link>
                 <MenuItem onClick={handleClose}>
                   <Link to='/sign-up'>
                     Register

@@ -5,11 +5,12 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
-import { useShops } from '../../services/shops.service';
 import { IShopBrand } from '../../globals/interfaces';
 import { CARD_WIDTH, CARD_HEIGHT } from '../../globals/constants';
 import CardLoader from '../Loaders/CardLoader';
-import { Link } from 'react-router-dom';
+import { selectShops } from '../../redux/shopsReducer';
+import { selectShopBrands } from '../../redux/shopBrandsReducer';
+import { useSelector } from 'react-redux';
 
 const useStyles = makeStyles({
     root: {
@@ -47,23 +48,23 @@ const useStyles = makeStyles({
 });
 
 interface IProductCardProps {
-    shopBrandId: number
-    shopId: number
+    shopBrandId: string
+    shopId: string
     address: string
 }
 
 const ShopCard = ({ shopBrandId, shopId, address }: IProductCardProps) => {
-    const shops = useShops();
+    const shopBrands = useSelector(selectShopBrands);
     const classes = useStyles();
     const [shopImage, setShopImage] = React.useState('');
     const [shopName, setShopName] = React.useState('');
 
     React.useEffect(() => {
-        shops.getShopBrand(shopBrandId).then((shopBrand: IShopBrand) => {
-            setShopImage(shopBrand.image);
-            setShopName(shopBrand.name);
-        })
-    }, [])
+        if (!shopBrands || !shopBrands.length) return;
+        const shopBrand = shopBrands.find((el) => el.id === shopBrandId)
+        setShopImage(shopBrand.image);
+        setShopName(shopBrand.name);
+    }, [shopBrands])
 
     const mediaLoaded = !!shopImage && !!shopName;
 

@@ -2,6 +2,9 @@ const express = require('express');
 const cors = require('cors');
 const authRouter = require('./routes/auth-router');
 const usersRouter = require('./routes/users-router');
+const shopBrandsRouter = require('./routes/shop-brands-router');
+const shopsRouter = require('./routes/shops-router');
+const productsRouter = require('./routes/products-router');
 const MongoClient = require('mongodb').MongoClient;
 const sendError = require('./utils').sendError;
 const url = 'mongodb://localhost:27017';
@@ -17,7 +20,10 @@ const corsOptions = {
 app.use(cors(corsOptions))
 app.use(express.json({ limit: '50mb' }));
 app.use('/api/auth', authRouter)
-    .use('/api/users', usersRouter);
+    .use('/api/users', usersRouter)
+    .use('/api/shop-brands', shopBrandsRouter)
+    .use('/api/shops', shopsRouter)
+    .use('/api/products', productsRouter);
 
 app.get('/', (req, res) => res.send('Hello from Shopping Assistant API!'))
 

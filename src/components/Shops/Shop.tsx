@@ -4,12 +4,12 @@ import Typography from '@material-ui/core/Typography';
 import CardLoader from '../Loaders/CardLoader';
 import { useParams } from 'react-router-dom';
 import { Paper, Grid } from '@material-ui/core';
-import { IProduct, IShop, IShopBrand } from '../../globals/interfaces';
-import { useProducts } from '../../services/products.service';
 import ItemLoader from '../Loaders/ItemLoader';
-import { useShops } from '../../services/shops.service';
-import { useShopBrands } from '../../services/shopBrands.service';
 import ShopProducts from './ShopProducts';
+import { selectShops } from '../../redux/shopsReducer';
+import { useSelector } from 'react-redux';
+import { selectShopBrands } from '../../redux/shopBrandsReducer';
+import { selectProducts } from '../../redux/productsReducer';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -37,26 +37,30 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const Shop = () => {
     const classes = useStyles();
-    const products = useProducts();
-    const shops = useShops();
-    const shopBrands = useShopBrands();
+    const products = useSelector(selectProducts);
+    const shops = useSelector(selectShops);
+    const shopBrands = useSelector(selectShopBrands);
     let { id } = useParams();
-    const shopId = parseInt(id)
     const [shop, setShop] = React.useState(null);
-    const [shopProducts, setShopProducts] = React.useState(null);
+    const [shopProducts, setShopProducts] = React.useState([]);
     const [shopBrand, setShopBrand] = React.useState(null);
 
     React.useEffect(() => {
-        shops.getShop(shopId).then((shop: IShop) => {
-            setShop(shop);
-            return shopBrands.getShopBrand(shop.shopBrandId);
-        }).then((shopBrand: IShopBrand) => {
-            setShopBrand(shopBrand);
-            return products.getAllProductsByShopId(shopId)
-        }).then((products: IProduct[]) => {
-            setShopProducts(products);
-        })
-    }, [])
+        if (!shops || !shops.length) return;
+
+        const shop = shops.find((el) => el.id === id);
+
+        if (!shop || !shopBrands || !shopBrands.length) return;
+
+        const shopBrand = shopBrands.find((el) => el.id === shop.shopBrandId)
+
+        setShop(shop);
+        setShopBrand(shopBrand);
+
+        if (!products || !products.length) return;
+
+        setShopProducts(products.filter((el) => el.shopId === shop.id));
+    }, [shopBrands, shops])
 
     const mediaLoaded = !!shop && !!shopProducts && !!shopBrand;
 
@@ -93,7 +97,7 @@ const Shop = () => {
                                         <Grid item>
                                             <div className="mapouter">
                                                 <div className="gmap_canvas">
-                                                    <iframe width="100%" height="550" id="gmap_canvas" src={shop.shopGoogleMapsSrc} frameBorder="0" scrolling="yes" marginHeight={0} marginWidth={0}></iframe>
+                                                    <iframe width="100%" height="550" id="gmap_canvas" src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBIjeI8ljOzaI9ci2wWBgti-Xgbk6YZfqQ&q=${shop.address.replace(/\s/g, '+')}`} frameBorder="0" scrolling="yes" marginHeight={0} marginWidth={0}></iframe>
                                                 </div>
                                             </div>
                                         </Grid>

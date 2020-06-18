@@ -146,12 +146,13 @@ const ShoppingNavigation = () => {
             findingPath.current = false;
             setLoadProcess(false);
         }
-        pathGeneratorWorker.postMessage({ mapPath: shop.map, mapEntryPoint: startPoint.current, products: availableProducts.map((el) => el.coordinates) });
+        console.log(availableProducts)
+        pathGeneratorWorker.postMessage({ mapPath: JSON.parse(shop.map), mapEntryPoint: startPoint.current, products: availableProducts.map((el) => el.coordinates) });
     }, [availableProducts])
 
     const toggleProduct = (event: React.MouseEvent<HTMLLIElement>) => {
         if (findingPath.current) return;
-        const productId = parseInt(event.currentTarget.dataset.id);
+        const productId = event.currentTarget.dataset.id;
         const productIsAvailable = event.currentTarget.dataset.isavailable === 'true';
         const product = productIsAvailable ?
             availableProducts.find((el) => el.id === productId) :

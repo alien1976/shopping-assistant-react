@@ -1,31 +1,32 @@
 export interface IProduct {
-    id: number
+    id: string
     name: string
     price: number
     image: string
     description?: string
-    coordinates: string
-    shopBrandId: number
-    shopId: number
+    coordinates?: string
+    shopBrandId: string
+    shopId: string
 }
 
 export interface IShop {
-    id: number;
-    shopBrandId: number;
+    id: string;
+    shopBrandId: string;
     name: string;
     address: string;
-    map: {};
+    map: string;
     mapImage: string
     mapEntryPoint: string
     shopGoogleMapsSrc: string
 }
 
 export interface IShopBrand {
-    id: number;
+    id: string;
     name: string;
-    shopsIds: number[];
-    productsIds: number[];
+    shopsIds: string[];
+    productsIds: string[];
     image: any;
+    [key: string]: string | string[] | any
 }
 
 export interface IUser {
@@ -39,4 +40,8 @@ export interface IUser {
     firstName: string
     lastName: string
     role: string
+}
+
+export interface IMap {
+    [key: string]: { coord: string, weight: number }[]
 }

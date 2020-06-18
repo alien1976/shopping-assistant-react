@@ -100,3 +100,67 @@ const validateUser = async (user, req, res, validatePassword = true) => {
 }
 
 exports.validateUser = validateUser;
+
+const validateShopBrand = async (shopBrand, req, res) => {
+    try {
+        const validationConfig = {
+            name: 'required|string|min:1',
+            shopsIds: 'array',
+            productsIds: 'array',
+            image: 'required|string|min:1',
+        }
+
+        await indicative.validator.validate(shopBrand, validationConfig)
+
+        return true;
+    } catch (error) {
+        sendError(req, res, 400, `Invalid shop brand data: ${error.map(e => e.message).join(', ')}`, error);
+        return false;
+    }
+}
+
+exports.validateShopBrand = validateShopBrand;
+
+const validateShop = async (shop, req, res) => {
+    try {
+        const validationConfig = {
+            name: 'required|string|min:1',
+            shopBrandId: 'required|string|min:1',
+            address: 'required|string|min:1',
+            map: 'string',
+            mapEntryPoint: 'string',
+            mapImage: 'string',
+        }
+
+        await indicative.validator.validate(shop, validationConfig)
+
+        return true;
+    } catch (error) {
+        sendError(req, res, 400, `Invalid shop data: ${error.map(e => e.message).join(', ')}`, error);
+        return false;
+    }
+}
+
+exports.validateShop = validateShop;
+
+const validateProduct = async (product, req, res) => {
+    try {
+        console.log(product.price, typeof product.price)
+        const validationConfig = {
+            name: 'required|string|min:1',
+            shopBrandId: 'required|string|min:1',
+            shopId: 'required|string|min:1',
+            price: 'required|number',
+            image: 'required|string|min:1'
+        }
+
+        await indicative.validator.validate(product, validationConfig)
+
+        return true;
+    } catch (error) {
+        sendError(req, res, 400, `Invalid product data: ${error.map(e => e.message).join(', ')}`, error);
+        return false;
+    }
+}
+
+exports.validateProduct = validateProduct;

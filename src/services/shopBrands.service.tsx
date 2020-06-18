@@ -1,57 +1,61 @@
-import { timeout } from "../utils/utils";
-import { SHOPS_BRANDS } from "../mock-data/shops";
+import { SA_API_BASE } from "../globals/constants";
+import { handleResponse, authHeader } from "../utils/utils";
 import { IShopBrand } from "../globals/interfaces";
 
-import * as React from 'react';
-
-const { createContext, useContext } = React;
-
-const ShopBrandsContext = createContext(null);
-
-export const ShopBrandsProvider = (props: { children: React.ReactNode }) => {
-    const value = {
-        getAllShopBrands: getAllShopBrands,
-        addShopBrand: addShopBrand,
-        setShopBrand: setShopBrand,
-        deleteShopBrand: deleteShopBrand,
-        getShopBrand: getShopBrand
+const getAllShopBrands = async () => {
+    const requestOptions = {
+        method: 'GET'
     };
 
-    return (
-        <ShopBrandsContext.Provider value={value} >
-            {props.children}
-        </ShopBrandsContext.Provider>
-    )
+    const response = fetch(`${SA_API_BASE}/shop-brands`, requestOptions);
+    return await handleResponse(response);
+}
+
+const getShopBrandById = async (id: string) => {
+    const requestOptions = {
+        method: 'GET'
+    };
+
+    const response = fetch(`${SA_API_BASE}/shop-brands/${id}`, requestOptions)
+    return await handleResponse(response);
+}
+
+const addShopBrand = async (shopBrand: IShopBrand) => {
+    const requestOptions = {
+        method: 'POST',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify(shopBrand)
+    };
+
+    const response = fetch(`${SA_API_BASE}/shop-brands`, requestOptions)
+    return await handleResponse(response);
+}
+
+const updateShopBrand = async (shopBrand: IShopBrand) => {
+    const requestOptions = {
+        method: 'PUT',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify(shopBrand)
+    };
+
+    const response = fetch(`${SA_API_BASE}/shop-brands/${shopBrand.id}`, requestOptions)
+    return await handleResponse(response);
+}
+
+const deleteShopBrand = async (shopBrandId: string) => {
+    const requestOptions = {
+        method: 'DELETE',
+        header: authHeader()
+    };
+
+    const response = fetch(`${SA_API_BASE}/shop-brands/${shopBrandId}`, requestOptions)
+    return await handleResponse(response);
+}
+
+export const shopBrandsService = {
+    getAllShopBrands: getAllShopBrands,
+    getShopBrandById: getShopBrandById,
+    addShopBrand: addShopBrand,
+    updateShopBrand: updateShopBrand,
+    deleteShopBrand: deleteShopBrand,
 };
-
-export const useShopBrands = () => {
-    return useContext(ShopBrandsContext);
-};
-
-const getAllShopBrands = async () => {
-    return SHOPS_BRANDS;
-}
-
-const getShopBrand = async (id: number) => {
-    // await timeout(1000);
-    const shopBrandIndex = SHOPS_BRANDS.findIndex((el) => el.id === id)
-    return SHOPS_BRANDS[shopBrandIndex];
-}
-
-const addShopBrand = async (value: IShopBrand) => {
-    await timeout(1000);
-    SHOPS_BRANDS.push(value);
-}
-
-const setShopBrand = async (value: IShopBrand, id: number) => {
-    await timeout(1000);
-    const shopBrandIndex = SHOPS_BRANDS.findIndex((el) => el.id === id)
-    SHOPS_BRANDS[shopBrandIndex] = value;
-    return SHOPS_BRANDS[shopBrandIndex];
-}
-
-const deleteShopBrand = async (id: number) => {
-    await timeout(1000);
-    const shopBrandIndex = SHOPS_BRANDS.findIndex((el) => el.id === id)
-    SHOPS_BRANDS.splice(shopBrandIndex, 1)
-}

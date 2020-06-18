@@ -7,10 +7,12 @@ const validateUser = require('../utils').validateUser;
 const ObjectID = require('mongodb').ObjectID;
 const indicative = require('indicative');
 const bcrypt = require('bcrypt');
+const verifyToken = require('./verify-token');
+const verifyRole = require('./verify-role');
 
 const router = express.Router();
 
-router.get('/', async (req, res) => {
+router.get('/', verifyToken, verifyRole(['Admin', 'Shop Owner']), async (req, res) => {
     const db = req.app.locals.db;
 
     try {
@@ -26,7 +28,7 @@ router.get('/', async (req, res) => {
     }
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', verifyToken, async (req, res) => {
     const params = req.params;
     const userId = req.params.id;
     const mongoId = new ObjectID(userId)
@@ -52,7 +54,7 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', createUser);
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', verifyToken, async (req, res) => {
     const userId = req.params.id;
     const mongoId = new ObjectID(userId)
     const db = req.app.locals.db;
@@ -114,7 +116,7 @@ router.put('/:id', async (req, res) => {
     }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', verifyToken, async (req, res) => {
     const params = req.params;
     const userId = req.params.id;
     const db = req.app.locals.db;

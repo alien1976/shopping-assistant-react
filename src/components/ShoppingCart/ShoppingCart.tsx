@@ -1,50 +1,44 @@
 import * as React from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { Badge } from '@material-ui/core';
-import { IProduct, IShop } from '../../globals/interfaces';
-import { useProducts } from '../../services/products.service';
 import ItemLoader from '../Loaders/ItemLoader';
 import ShopCard from '../Shops/ShopCard';
-import { useShops } from '../../services/shops.service';
 import { useSelector } from 'react-redux';
 import { selectCart } from '../../redux/cartReducer';
+import { selectShops } from '../../redux/shopsReducer';
+import { selectProducts } from '../../redux/productsReducer';
 
 const ShoppingChart = () => {
     const history = useHistory();
-    const shopsService = useShops();
-    const products = useProducts();
+    const allShops = useSelector(selectShops);
+    const products = useSelector(selectProducts);
     const productsInCartIds = useSelector(selectCart);
     const [shops, setShops] = React.useState([]);
     const [allProducts, setAllProducts] = React.useState([]);
 
     React.useEffect(() => {
-        let productsTemp: IProduct[] = [];
+        if (!products || !products.length || !allShops || !allShops.length || !productsInCartIds || !productsInCartIds.length) return;
 
-        products.getAllProducts().then((allProducts: IProduct[]) => {
-            productsTemp = allProducts.filter((el) => productsInCartIds.indexOf(el.id.toString()) !== -1);
-            setAllProducts(productsTemp.map((el) => { return { ...el, bought: false } }));
+        const productsTemp = products.filter((el) => productsInCartIds.indexOf(el.id.toString()) !== -1);
+        setAllProducts(productsTemp.map((el) => { return { ...el, bought: false } }));
+        setShops(allShops.filter((el) => productsTemp.findIndex((product) => product.shopId === el.id) !== -1))
+    }, [productsInCartIds, products, allShops])
 
-            return shopsService.getAllShops()
-        }).then((shops: IShop[]) => {
-            setShops(shops.filter((el) => productsTemp.findIndex((product) => product.shopId === el.id) !== -1))
-        })
-    }, [productsInCartIds])
-
-    const getShopBrandProductsCount = React.useCallback((shopBrandId: number) => {
+    const getShopBrandProductsCount = React.useCallback((shopId: string) => {
         let count = 0;
 
         for (let product of allProducts) {
-            if (product.shopId === shopBrandId) count++;
+            if (product.shopId === shopId) count++;
         }
 
         return count;
     }, [allProducts]);
 
-    const getShopBrandCartProducts = React.useCallback((shopBrandId: number) => {
+    const getShopBrandCartProducts = React.useCallback((shopId: string) => {
         const products = [];
 
         for (let product of allProducts) {
-            if (product.shopId === shopBrandId) products.push(product);
+            if (product.shopId === shopId) products.push(product);
         }
 
         return products;
