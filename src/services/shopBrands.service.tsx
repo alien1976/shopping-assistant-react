@@ -45,7 +45,7 @@ const updateShopBrand = async (shopBrand: IShopBrand) => {
 const deleteShopBrand = async (shopBrandId: string) => {
     const requestOptions = {
         method: 'DELETE',
-        header: authHeader()
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
     };
 
     const response = fetch(`${SA_API_BASE}/shop-brands/${shopBrandId}`, requestOptions)

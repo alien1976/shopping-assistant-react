@@ -1,0 +1,2 @@
+{"_id":{"$oid":"5eeb7fe021da333308a10099"},"firstName":"Kaloyan","lastName":"Geshev","userName":"admin","password":"$2b$10$B25bkSotvT8LgNJT6d9TyOfRa98owzuoxGPlTVfajsJ2AF62H0jOy","email":"admin@gmail.com","role":"Admin","id":"5eeb7fe021da333308a10099","favoriteProducts":["5eeb8b95060dc82194a2d3fd"]}
+{"_id":{"$oid":"5eeb824721da333308a1009c"},"userName":"user1","firstName":"Peter","lastName":"Balev","email":"Pb@gmail.com","role":"Shop Manager","password":"$2b$10$HuvM98hP666ojk2vLKFDLe1uOpkNeURecgul7uz3NePk9ltoHkjT6","favoriteProducts":[""]}

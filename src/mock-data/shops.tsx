@@ -18,20 +18,21 @@
 // export const PRODUCTS = [
 //     { id: 1, name: 'Balla Bread White', shopBrandId: 1, shopId: 1, coordinates: '21,34', price: 0.89, image: 'https://i0.wp.com/gatherforbread.com/wp-content/uploads/2015/08/Easiest-Yeast-Bread.jpg?fit=800%2C1157&ssl=1' },
 //     { id: 2, name: 'Balla Bread Brown', shopBrandId: 1, shopId: 1, coordinates: '253,54', price: 0.89, image: 'https://i0.wp.com/gatherforbread.com/wp-content/uploads/2015/08/Easiest-Yeast-Bread.jpg?fit=800%2C1157&ssl=1' },
+//     { id: 11, name: 'Cleverr Chocolate', shopBrandId: 1, shopId: 1, coordinates: '70,50', price: 0.99, image: 'https://upload.wikimedia.org/wikipedia/commons/7/78/Chocolat.png' },
+//     { id: 13, name: 'Cleverr Ice cream', shopBrandId: 1, shopId: 1, coordinates: '50,30', price: 1.05, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTCVlQgNeFjOyMgdmzRufZmCU37XoCd7hKZ77ZcaxOflsnxuaHK&usqp=CAU' },
+//     { id: 14, name: 'Balla Milk', shopBrandId: 1, shopId: 1, coordinates: '300,300', description: 'This product is with very high quality. Made from happy cows.', price: 1.50, image: 'https://33q47o1cmnk34cvwth15pbvt120l-wpengine.netdna-ssl.com/wp-content/uploads/raw-milk-1-e1563894986431-755x1024.jpg' },
+//     { id: 15, name: 'Clever Water', shopBrandId: 1, shopId: 1, coordinates: '400,123', price: 0.30, image: 'https://www.brecorder.com/wp-content/uploads/2018/07/water-3.jpg' },
+//     { id: 16, name: 'Devin', shopBrandId: 1, shopId: 1, coordinates: '400,204', price: 0.60, image: 'https://www.brecorder.com/wp-content/uploads/2018/07/water-3.jpg' },
 //     { id: 3, name: 'Balla Milk', shopBrandId: 1, shopId: 2, coordinates: '266,354', description: 'This product is with very high quality. Made from happy cows.', price: 1.50, image: 'https://33q47o1cmnk34cvwth15pbvt120l-wpengine.netdna-ssl.com/wp-content/uploads/raw-milk-1-e1563894986431-755x1024.jpg' },
 //     { id: 4, name: 'Balla Bread White', shopBrandId: 1, shopId: 2, coordinates: '353,115', price: 0.89, image: 'https://i0.wp.com/gatherforbread.com/wp-content/uploads/2015/08/Easiest-Yeast-Bread.jpg?fit=800%2C1157&ssl=1' },
 //     { id: 5, name: 'Balla Milk', shopBrandId: 1, shopId: 2, coordinates: '26,234', description: 'This product is with very high quality. Made from happy cows.', price: 1.50, image: 'https://33q47o1cmnk34cvwth15pbvt120l-wpengine.netdna-ssl.com/wp-content/uploads/raw-milk-1-e1563894986431-755x1024.jpg' },
 //     { id: 6, name: 'Clever Water', shopBrandId: 1, shopId: 2, coordinates: '223,344', price: 0.30, image: 'https://www.brecorder.com/wp-content/uploads/2018/07/water-3.jpg' },
 //     { id: 7, name: 'Devin', shopBrandId: 1, shopId: 2, coordinates: '400,204', price: 0.60, image: 'https://www.brecorder.com/wp-content/uploads/2018/07/water-3.jpg' },
+//     { id: 10, name: 'Cleverr Chocolate', shopBrandId: 1, shopId: 2, coordinates: '94,234', price: 0.99, image: 'https://upload.wikimedia.org/wikipedia/commons/7/78/Chocolat.png' },
+//     { id: 12, name: 'Cleverr Ice cream', shopBrandId: 1, shopId: 2, coordinates: '100,250', price: 1.05, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTCVlQgNeFjOyMgdmzRufZmCU37XoCd7hKZ77ZcaxOflsnxuaHK&usqp=CAU' },
 //     { id: 8, name: 'Kaafland Bread', shopBrandId: 2, shopId: 3, coordinates: '231,74', price: 0.68, image: 'https://i0.wp.com/gatherforbread.com/wp-content/uploads/2015/08/Easiest-Yeast-Bread.jpg?fit=800%2C1157&ssl=1' },
 //     { id: 9, name: 'Kaafland Bread', shopBrandId: 2, shopId: 4, coordinates: '41,64', price: 0.68, image: 'https://i0.wp.com/gatherforbread.com/wp-content/uploads/2015/08/Easiest-Yeast-Bread.jpg?fit=800%2C1157&ssl=1' },
-//     { id: 10, name: 'Cleverr Chocolate', shopBrandId: 1, shopId: 2, coordinates: '94,234', price: 0.99, image: 'https://upload.wikimedia.org/wikipedia/commons/7/78/Chocolat.png' },
-//     { id: 11, name: 'Cleverr Chocolate', shopBrandId: 1, shopId: 1, coordinates: '70,50', price: 0.99, image: 'https://upload.wikimedia.org/wikipedia/commons/7/78/Chocolat.png' },
-//     { id: 12, name: 'Cleverr Ice cream', shopBrandId: 1, shopId: 2, coordinates: '100,250', price: 1.05, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTCVlQgNeFjOyMgdmzRufZmCU37XoCd7hKZ77ZcaxOflsnxuaHK&usqp=CAU' },
-//     { id: 13, name: 'Cleverr Ice cream', shopBrandId: 1, shopId: 1, coordinates: '50,30', price: 1.05, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTCVlQgNeFjOyMgdmzRufZmCU37XoCd7hKZ77ZcaxOflsnxuaHK&usqp=CAU' },
-//     { id: 14, name: 'Balla Milk', shopBrandId: 1, shopId: 1, coordinates: '300,300', description: 'This product is with very high quality. Made from happy cows.', price: 1.50, image: 'https://33q47o1cmnk34cvwth15pbvt120l-wpengine.netdna-ssl.com/wp-content/uploads/raw-milk-1-e1563894986431-755x1024.jpg' },
-//     { id: 15, name: 'Clever Water', shopBrandId: 1, shopId: 1, coordinates: '400,123', price: 0.30, image: 'https://www.brecorder.com/wp-content/uploads/2018/07/water-3.jpg' },
-//     { id: 16, name: 'Devin', shopBrandId: 1, shopId: 1, coordinates: '400,204', price: 0.60, image: 'https://www.brecorder.com/wp-content/uploads/2018/07/water-3.jpg' },
+
 // ]
 // export const SHOPS_BRANDS = [
 //     { id: 1, name: 'Balla', shopsIds: [1, 2], productsIds: [1, 2, 3, 4, 5, 6, 7, 10, 11, 12, 13, 14, 15, 16], image: ballaImageUrl },

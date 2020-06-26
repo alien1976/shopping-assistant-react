@@ -51,11 +51,12 @@ router.get('/:id', async (req, res) => {
 
 const updateShopBrand = async (product, db) => {
     const shopBrand = await db.collection(SHOP_BRANDS_COLLECTION).findOne({ _id: new ObjectID(product.shopBrandId) });
+    console.log(shopBrand)
     if (!shopBrand) return false;
 
     shopBrand.productsIds.push(product.id);
 
-    const dbRes = await db.collection(SHOP_BRANDS_COLLECTION).updateOne({ _id: new ObjectID(shopBrand.id) }, { $set: shopBrand })
+    const dbRes = await db.collection(SHOP_BRANDS_COLLECTION).updateOne({ _id: new ObjectID(product.shopBrandId) }, { $set: shopBrand })
 
     if (!dbRes.result.ok) return false;
 

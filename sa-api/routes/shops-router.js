@@ -55,7 +55,7 @@ const updateShopBrand = async (shop, db) => {
 
     shopBrand.shopsIds.push(shop.id);
 
-    const dbRes = await db.collection(SHOP_BRANDS_COLLECTION).updateOne({ _id: new ObjectID(shopBrand.id) }, { $set: shopBrand })
+    const dbRes = await db.collection(SHOP_BRANDS_COLLECTION).updateOne({ _id: new ObjectID(shop.shopBrandId) }, { $set: shopBrand })
 
     if (!dbRes.result.ok) return false;
 
@@ -160,6 +160,11 @@ router.put('/:id', verifyToken, verifyRole(['Admin', 'Shop Owner', 'Shop Manager
             sendError(req, res, 500, `Unable to update shop brand with ID=${shop.shopBrandId}`)
             return;
         }
+    }
+
+    if (!await updateShopBrand(shop, db)) {
+        sendError(req, res, 500, `Unable to update shop brand with ID=${shop.shopBrandId}`)
+        return;
     }
 
     try {
