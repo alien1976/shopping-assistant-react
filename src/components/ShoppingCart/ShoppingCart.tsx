@@ -7,14 +7,24 @@ import { useSelector } from 'react-redux';
 import { selectCart } from '../../redux/cartReducer';
 import { selectShops } from '../../redux/shopsReducer';
 import { selectProducts } from '../../redux/productsReducer';
+import { selectUserCart } from '../../redux/userReducer';
+import { selectLoggedIn } from '../../redux/authenticationReducer';
 
 const ShoppingChart = () => {
     const history = useHistory();
     const allShops = useSelector(selectShops);
+    const isUserLogged = useSelector(selectLoggedIn);
+    const userCart = useSelector(selectUserCart);
+    const cart = useSelector(selectCart);
     const products = useSelector(selectProducts);
-    const productsInCartIds = useSelector(selectCart);
     const [shops, setShops] = React.useState([]);
     const [allProducts, setAllProducts] = React.useState([]);
+
+    const productsInCartIds = React.useMemo(() => {
+        if (isUserLogged) return userCart;
+
+        return cart;
+    }, [isUserLogged, userCart, cart])
 
     React.useEffect(() => {
         if (!products || !products.length || !allShops || !allShops.length || !productsInCartIds || !productsInCartIds.length) return;

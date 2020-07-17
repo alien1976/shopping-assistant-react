@@ -19,7 +19,7 @@ import { Badge } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectCartLength } from '../../redux/cartReducer';
 import { selectLoggedIn, logoutRequest } from '../../redux/authenticationReducer';
-import { selectUserRole, selectUserFavoritesProducts } from '../../redux/userReducer';
+import { selectUserRole, selectUserFavoritesProducts, selectUserCart } from '../../redux/userReducer';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -46,13 +46,20 @@ const useStyles = makeStyles((theme: Theme) =>
 const MenuAppBar = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const productsInCart = useSelector(selectCartLength);
+  const userCart = useSelector(selectUserCart);
+  const cartLength = useSelector(selectCartLength);
   const favoriteProducts = useSelector(selectUserFavoritesProducts);
   const isUserLogged = useSelector(selectLoggedIn);
   const [isDrawerOpened, setIsDrawerOpened] = React.useState(false)
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const userRole = useSelector(selectUserRole)
+
+  const productsInCart = React.useMemo(() => {
+    if (isUserLogged) return userCart ? userCart.length : 0;
+
+    return cartLength;
+  }, [isUserLogged, userCart, cartLength])
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);

@@ -14,12 +14,11 @@ import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import { CARD_WIDTH, CARD_HEIGHT } from '../../globals/constants';
 import CardLoader from '../Loaders/CardLoader';
 import { Link } from 'react-router-dom';
-import { addProductToCart, removeProductFromCart } from '../../redux/cartReducer';
+import { addProductToCart, removeProductFromCart, selectCart } from '../../redux/cartReducer';
 import { useSelector, useDispatch } from 'react-redux';
-import { IStoreState } from '../../redux/store';
 import { IProduct } from '../../globals/interfaces';
 import { selectLoggedIn } from '../../redux/authenticationReducer';
-import { addProductToFavorites, selectUserFavoritesProducts, removeProductFromFavorites } from '../../redux/userReducer';
+import { addProductToFavorites, selectUserFavoritesProducts, removeProductFromFavorites, selectUserCart, removeProductFromUserCart, addProductToUserCart } from '../../redux/userReducer';
 
 const useStyles = makeStyles({
     root: {
@@ -75,7 +74,6 @@ interface IProductCardProps {
 const ProductCard = ({ product }: IProductCardProps) => {
     const { image, id, name, price } = product;
     const classes = useStyles();
-    const isInCart = useSelector((state: IStoreState) => state.appState.cart.indexOf(id.toString()) !== -1);
     const favoriteProducts = useSelector(selectUserFavoritesProducts);
     const isProductInFavorite = React.useMemo(() => {
         if (!favoriteProducts) return false;
@@ -85,13 +83,21 @@ const ProductCard = ({ product }: IProductCardProps) => {
 
     const dispatch = useDispatch();
     const isUserLogged = useSelector(selectLoggedIn);
+    const userCart = useSelector(selectUserCart);
+    const cart = useSelector(selectCart);
+    const isInCart = React.useMemo(() => {
+        console.log(userCart)
+        if (isUserLogged) return userCart && userCart.indexOf(id.toString()) !== -1 ? true : false;
+
+        return cart && cart.indexOf(id.toString()) !== -1 ? true : false;
+    }, [isUserLogged, userCart, cart])
     const mediaLoaded = !!image && !!name;
 
     const productToCartToggle = () => {
         if (isInCart) {
-            dispatch(removeProductFromCart(id.toString()));
+            !isUserLogged ? dispatch(removeProductFromCart(id.toString())) : dispatch(removeProductFromUserCart(id.toString()));
         } else {
-            dispatch(addProductToCart(id.toString()));
+            !isUserLogged ? dispatch(addProductToCart(id.toString())) : dispatch(addProductToUserCart(id.toString()));
         }
     }
 

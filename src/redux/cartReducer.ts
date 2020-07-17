@@ -25,11 +25,15 @@ export const appSlice = createSlice({
         setFastestPath: (state, action) => {
             state.fastestPath = action.payload
         },
+        clearCart: (state) => {
+            state.cart = [];
+            localStorage.setItem('cart', state.cart)
+        }
     }
 });
 
 //actions
-export const { addProductToCart, removeProductFromCart, setFastestPath } = appSlice.actions;
+export const { addProductToCart, removeProductFromCart, setFastestPath, clearCart } = appSlice.actions;
 
 //selectors
 export const selectCart = (state: IStoreState) => state.appState.cart;

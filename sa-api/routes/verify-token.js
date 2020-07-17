@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const { sendError } = require('../utils');
 const secret = 'a';
 const verifyToken = (req, res, next) => {
     const tokenHeader = req.headers['authorization'];
@@ -10,7 +11,10 @@ const verifyToken = (req, res, next) => {
     const token = segments[1].trim();
 
     jwt.verify(token, secret, function (error, decoded) {
-        if (error) next({ status: 403, message: `Failed to authenticate token.`, error });
+        if (error) {
+            sendError(req, res, 403, `Failed to authenticate token.`, error);
+            return;
+        }
         else {
             req.userId = decoded.id;
             next();

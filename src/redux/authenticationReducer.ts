@@ -40,6 +40,7 @@ export const authSlice = createSlice({
             state.registering = false;
         },
         logout: (state) => {
+            localStorage.removeItem('user');
             state.loggedIn = false;
             state.userToken = null;
         }
@@ -50,7 +51,6 @@ export const authSlice = createSlice({
 export const { loginRequest, loginSuccess, loginFailure, registerRequest, registerEnd, logout } = authSlice.actions;
 
 export const logoutRequest = () => async (dispatch: React.Dispatch<AnyAction>) => {
-    localStorage.removeItem('user');
     dispatch(logout());
     dispatch(setUser({}))
     dispatch(openSnackBar({ message: 'Successfully sign out', status: 'success' }))

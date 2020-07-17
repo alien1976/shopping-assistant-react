@@ -10,6 +10,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { removeProductFromCart, addProductToCart, selectFastestPath, setFastestPath } from '../../redux/cartReducer';
 import { useParams, useLocation } from 'react-router-dom';
 import MapPathFinder from '../Map/MapPathFinder';
+import { addProductToUserCart, removeProductFromUserCart } from '../../redux/userReducer';
+import { selectLoggedIn } from '../../redux/authenticationReducer';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -92,6 +94,7 @@ const ShoppingNavigation = () => {
     const shop = location.state.shop;
     const classes = useStyles();
     const dispatch = useDispatch();
+    const isUserLogged = useSelector(selectLoggedIn);
     const findingPath = React.useRef(false);
     const startPoint = React.useRef(shop.mapEntryPoint);
     const [loadProcess, setLoadProcess] = React.useState(false);
@@ -163,11 +166,11 @@ const ShoppingNavigation = () => {
         if (productIsAvailable) {
             setAvailableProducts(availableProducts.filter((el) => el.id !== productId));
             setBoughtProducts([product, ...boughtProducts]);
-            dispatch(removeProductFromCart(product.id.toString()))
+            !isUserLogged ? dispatch(removeProductFromCart(product.id.toString())) : dispatch(removeProductFromUserCart(product.id.toString()));
         } else {
             setBoughtProducts(boughtProducts.filter((el) => el.id !== productId));
             setAvailableProducts([product, ...availableProducts]);
-            dispatch(addProductToCart(product.id.toString()))
+            !isUserLogged ? dispatch(addProductToCart(product.id.toString())) : dispatch(addProductToUserCart(product.id.toString()));
         }
 
     }
