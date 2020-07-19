@@ -135,7 +135,7 @@ const MapProductPositionEditor = () => {
                             {<g id='all-products'>
                                 {products.map((el) => {
                                     const [x1, y1] = el.coordinates.split(',');
-                                    return <circle cx={x1} cy={y1} r={routeScale} fill={POINT_COLOR} stroke={POINT_STROKE}></circle>
+                                    return <circle key={el.id} cx={x1} cy={y1} r={routeScale} fill={POINT_COLOR} stroke={POINT_STROKE}></circle>
                                 })}
                             </g>}
                             <circle className='draggable' cx={x1} cy={y1} r={routeScale + 2} fill={PRODUCT_COLOR} stroke={POINT_STROKE}></circle>

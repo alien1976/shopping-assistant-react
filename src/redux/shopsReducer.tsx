@@ -13,12 +13,28 @@ export const shopsSlice = createSlice({
     reducers: {
         setShops: (state, action) => {
             state.shops = action.payload
+        },
+        updateShopState: (state, action) => {
+            const newItem = action.payload;
+            const oldItemIndex = state.shops.findIndex((el) => el.id === newItem.id);
+
+            if (oldItemIndex === -1) return;
+
+            state.shops[oldItemIndex] = newItem;
+        },
+        deleteShopState: (state, action) => {
+            const oldItem = action.payload;
+            const oldItemIndex = state.shops.findIndex((el) => el.id === oldItem.id);
+
+            if (oldItemIndex === -1) return;
+
+            state.shops.splice(oldItemIndex, 1);
         }
     }
 });
 
 //actions
-export const { setShops } = shopsSlice.actions;
+export const { setShops, updateShopState, deleteShopState } = shopsSlice.actions;
 
 export const getAllShops = () => async (dispatch: React.Dispatch<AnyAction>) => {
     try {
@@ -31,8 +47,8 @@ export const getAllShops = () => async (dispatch: React.Dispatch<AnyAction>) => 
 
 export const updateShop = (shop: IShop) => async (dispatch: React.Dispatch<AnyAction>) => {
     try {
-        await shopsService.updateShop(shop);
-        getAllShops();
+        const shopData = await shopsService.updateShop(shop);
+        dispatch(updateShopState(shopData))
         dispatch(openSnackBar({ message: `Successfully updated shop ${shop.name}!`, status: 'success' }));
     } catch (error) {
         dispatch(openSnackBar({ message: error.message, status: 'error' }))
@@ -41,8 +57,8 @@ export const updateShop = (shop: IShop) => async (dispatch: React.Dispatch<AnyAc
 
 export const deleteShop = (shop: IShop) => async (dispatch: React.Dispatch<AnyAction>) => {
     try {
-        await shopsService.deleteShop(shop.id.toString());
-        getAllShops();
+        const shopData = await shopsService.deleteShop(shop.id.toString());
+        dispatch(deleteShopState(shopData))
         dispatch(openSnackBar({ message: `Successfully deleted shop!`, status: 'success' }));
     } catch (error) {
         dispatch(openSnackBar({ message: error.message, status: 'error' }))

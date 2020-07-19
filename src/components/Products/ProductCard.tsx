@@ -86,7 +86,6 @@ const ProductCard = ({ product }: IProductCardProps) => {
     const userCart = useSelector(selectUserCart);
     const cart = useSelector(selectCart);
     const isInCart = React.useMemo(() => {
-        console.log(userCart)
         if (isUserLogged) return userCart && userCart.indexOf(id.toString()) !== -1 ? true : false;
 
         return cart && cart.indexOf(id.toString()) !== -1 ? true : false;

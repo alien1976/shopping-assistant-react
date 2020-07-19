@@ -13,12 +13,28 @@ export const shopBrandsSlice = createSlice({
     reducers: {
         setShopBrands: (state, action) => {
             state.shops = action.payload
+        },
+        updateShopBrandState: (state, action) => {
+            const newItem = action.payload;
+            const oldItemIndex = state.shops.findIndex((el) => el.id === newItem.id);
+
+            if (oldItemIndex === -1) return;
+
+            state.shops[oldItemIndex] = newItem;
+        },
+        deleteShopBrandState: (state, action) => {
+            const oldItem = action.payload;
+            const oldItemIndex = state.shops.findIndex((el) => el.id === oldItem.id);
+
+            if (oldItemIndex === -1) return;
+
+            state.shops.splice(oldItemIndex, 1);
         }
     }
 });
 
 //actions
-export const { setShopBrands } = shopBrandsSlice.actions;
+export const { setShopBrands, updateShopBrandState, deleteShopBrandState } = shopBrandsSlice.actions;
 
 export const getAllShopBrands = () => async (dispatch: React.Dispatch<AnyAction>) => {
     try {
@@ -31,8 +47,8 @@ export const getAllShopBrands = () => async (dispatch: React.Dispatch<AnyAction>
 
 export const updateShopBrand = (shopBrand: IShopBrand) => async (dispatch: React.Dispatch<AnyAction>) => {
     try {
-        await shopBrandsService.updateShopBrand(shopBrand);
-        getAllShopBrands();
+        const shopBrandData = await shopBrandsService.updateShopBrand(shopBrand);
+        dispatch(updateShopBrandState(shopBrandData))
         dispatch(openSnackBar({ message: `Successfully updated shop brand ${shopBrand.name}!`, status: 'success' }));
     } catch (error) {
         dispatch(openSnackBar({ message: error.message, status: 'error' }))
@@ -41,8 +57,8 @@ export const updateShopBrand = (shopBrand: IShopBrand) => async (dispatch: React
 
 export const deleteShopBrand = (shopBrand: IShopBrand) => async (dispatch: React.Dispatch<AnyAction>) => {
     try {
-        await shopBrandsService.deleteShopBrand(shopBrand.id.toString());
-        getAllShopBrands();
+        const shopBrandData = await shopBrandsService.deleteShopBrand(shopBrand.id.toString());
+        dispatch(deleteShopBrandState(shopBrandData))
         dispatch(openSnackBar({ message: `Successfully deleted shop brand!`, status: 'success' }));
     } catch (error) {
         dispatch(openSnackBar({ message: error.message, status: 'error' }))

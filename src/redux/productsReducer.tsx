@@ -13,12 +13,31 @@ export const productsSlice = createSlice({
     reducers: {
         setProducts: (state, action) => {
             state.products = action.payload
+        },
+        addNewProductState: (state, action) => {
+            state.products.push(action.payload);
+        },
+        updateProductState: (state, action) => {
+            const newItem = action.payload;
+            const oldItemIndex = state.products.findIndex((el) => el.id === newItem.id);
+
+            if (oldItemIndex === -1) return;
+
+            state.products[oldItemIndex] = newItem;
+        },
+        deleteProductState: (state, action) => {
+            const oldItem = action.payload;
+            const oldItemIndex = state.products.findIndex((el) => el.id === oldItem.id);
+
+            if (oldItemIndex === -1) return;
+
+            state.products.splice(oldItemIndex, 1);
         }
     }
 });
 
 //actions
-export const { setProducts } = productsSlice.actions;
+export const { setProducts, addNewProductState, updateProductState, deleteProductState } = productsSlice.actions;
 
 export const getAllProducts = () => async (dispatch: React.Dispatch<AnyAction>) => {
     try {
@@ -31,8 +50,8 @@ export const getAllProducts = () => async (dispatch: React.Dispatch<AnyAction>) 
 
 export const updateProduct = (product: IProduct) => async (dispatch: React.Dispatch<AnyAction>) => {
     try {
-        await productsService.updateProduct(product);
-        getAllProducts();
+        const newProductData = await productsService.updateProduct(product);
+        dispatch(updateProductState(newProductData));
         dispatch(openSnackBar({ message: `Successfully updated product ${product.name}!`, status: 'success' }));
     } catch (error) {
         dispatch(openSnackBar({ message: error.message, status: 'error' }))
@@ -41,8 +60,8 @@ export const updateProduct = (product: IProduct) => async (dispatch: React.Dispa
 
 export const deleteProduct = (product: IProduct) => async (dispatch: React.Dispatch<AnyAction>) => {
     try {
-        await productsService.deleteProduct(product.id.toString());
-        getAllProducts();
+        const productData = await productsService.deleteProduct(product.id.toString());
+        dispatch(deleteProductState(productData))
         dispatch(openSnackBar({ message: `Successfully deleted product!`, status: 'success' }));
     } catch (error) {
         dispatch(openSnackBar({ message: error.message, status: 'error' }))
