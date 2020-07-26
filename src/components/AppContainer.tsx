@@ -13,7 +13,7 @@ import SignUp from './Users/SignUp';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectLoggedIn } from '../redux/authenticationReducer';
 import Profile from './Users/Profile';
-import { getUserData, selectUserRole } from '../redux/userReducer';
+import { getUserData, selectUserRole, selectGettingUserData, setGettingUserData } from '../redux/userReducer';
 import { USER_ROLES } from '../globals/constants';
 import { openSnackBar } from '../redux/snackBarReducer';
 import UsersManager from './Users/UsersManager';
@@ -27,6 +27,7 @@ import { getAllProducts } from '../redux/productsReducer';
 import MapEditor from './Map/MapEditor/MapEditor';
 import MapProductPositionEditor from './Map/MapEditor/MapProductPositionEditor';
 import UserFavoriteProducts from './Users/UserFavoriteProducts';
+import CardLoader from './Loaders/CardLoader';
 
 const Home = () => {
     return (
@@ -45,6 +46,7 @@ const NotFound = () => {
 }
 
 const AppContainer = () => {
+    const isGettingUserData = useSelector(selectGettingUserData)
     const isLoggedIn = useSelector(selectLoggedIn);
     const userRole = useSelector(selectUserRole);
     const dispatch = useDispatch();
@@ -60,8 +62,16 @@ const AppContainer = () => {
             } catch (error) {
                 console.error(error)
             }
+        } else {
+            dispatch(setGettingUserData(false));
         }
     }, [])
+
+    if (isGettingUserData) {
+        return <div id="container">
+            <CardLoader loaded={isGettingUserData}></CardLoader>
+        </div>
+    }
 
     return (
         <div id="container">

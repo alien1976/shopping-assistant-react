@@ -99,6 +99,7 @@ const Login = () => {
                         helperText={userNameError ? userNameError : ''}
                     />
                     <TextField
+                        onKeyUp={(event) => event.keyCode === 13 ? login(event) : null}
                         onBlur={onPasswordChange}
                         variant="outlined"
                         margin="normal"

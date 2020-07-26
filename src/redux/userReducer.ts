@@ -11,7 +11,7 @@ export const userSlice = createSlice({
     initialState: {
         updatingUser: false,
         deletingUser: false,
-        gettingUserData: false,
+        gettingUserData: true,
         user: {} as IUser
     },
     reducers: {
@@ -37,8 +37,8 @@ export const getUserData = (userId: string) => async (dispatch: React.Dispatch<A
     dispatch(setGettingUserData(true));
     try {
         const userData = await userService.getUserById(userId);
-        dispatch(setGettingUserData(false));
         dispatch(setUser(userData));
+        dispatch(setGettingUserData(false));
     } catch (error) {
         dispatch(logout())
         dispatch(setUser({}))
@@ -147,5 +147,6 @@ export const selectUserRole = (state: IStoreState) => state.userState.user && st
 export const selectUpdatingUser = (state: IStoreState) => state.userState.updatingUser;
 export const selectUserFavoritesProducts = (state: IStoreState) => state.userState.user.favoriteProducts;
 export const selectUserCart = (state: IStoreState) => state.userState.user.cart;
+export const selectGettingUserData = (state: IStoreState) => state.userState.gettingUserData;
 
 export default userSlice.reducer;

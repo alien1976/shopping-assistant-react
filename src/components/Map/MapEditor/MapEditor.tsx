@@ -317,7 +317,7 @@ const MapEditor = () => {
     const mapStyles = React.useMemo(() => {
         return {
             cursor: '',
-            backgroundImage: `url(${(shop && shop.mapImage) || ''})`,
+            // backgroundImage: `url(${(shop && shop.mapImage) || ''})`,
         }
     }, [shop])
 
@@ -372,6 +372,7 @@ const MapEditor = () => {
                     <div className="map-editor-wrapper">
                         <div className="map" style={mapStyles}>
                             <svg ref={svgRef} className={getSVGClassByMode()} onMouseDown={startDraggingPoint} onMouseMove={dragPoint} onMouseUp={onDragEnds} onClick={addPoint} version="1.1" viewBox="0.0 0.0 500.0 488.0" fill="none" stroke="none" >
+                                <image x="0" y="0" width="100%" height="100%" xlinkHref={shop.mapImage} />
                                 {showMapEditor &&
                                     <g id="lines">
                                         {Object.keys(adjList).map((vertex) => {
