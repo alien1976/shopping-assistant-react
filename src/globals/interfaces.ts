@@ -43,6 +43,12 @@ export interface IUser {
     cart?: string[]
 }
 
+export interface INeighbour {
+    coord: string
+    weight: number
+    [key: string]: string | number
+}
+
 export interface IMap {
-    [key: string]: { coord: string, weight: number }[]
+    [key: string]: INeighbour[]
 }

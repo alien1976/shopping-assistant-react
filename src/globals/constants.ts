@@ -9,3 +9,11 @@ export const USER_ROLES = {
     'Shop Owner': 'Shop Owner',
     'Admin': 'Admin'
 }
+
+export const EDITOR_MODES = {
+    ADDING_POINTS: 'Add points',
+    CONNECTING_POINTS: 'Connect points',
+    MOVING_POINTS: 'Move points',
+    DELETING: 'Delete points',
+    SELECTING_ENTRY_POINT: 'Selecting entry point'
+}
